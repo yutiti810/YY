@@ -1,0 +1,642 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>英単語クイズ</title>
+<style>
+    body {
+        font-family: Meiryo, sans-serif;
+        background-color: whitesmoke;
+        margin: 0;
+        padding: 30px;
+    }
+
+    .quiz {
+        max-width: 850px;
+        margin: auto;
+        background: white;
+        padding: 35px;
+        border-radius: 18px;
+        box-shadow: 0 5px 20px gray;
+    }
+
+    h1 {
+        margin-top: 0;
+        color: navy;
+    }
+
+    .info {
+        color: gray;
+        margin-bottom: 25px;
+    }
+
+    .japanese {
+        font-size: 20px;
+        margin-bottom: 25px;
+        line-height: 1.7;
+    }
+
+    .english {
+        font-size: 25px;
+        line-height: 1.7;
+        margin-bottom: 25px;
+    }
+
+    .blank {
+        color: navy;
+        letter-spacing: 3px;
+    }
+
+    input {
+        width: 90%;
+        max-width: 600px;
+        font-size: 22px;
+        padding: 12px;
+        border: 2px solid gray;
+        border-radius: 8px;
+    }
+
+    button {
+        font-size: 18px;
+        padding: 10px 22px;
+        margin: 12px 5px 0 0;
+        border: none;
+        border-radius: 8px;
+        cursor: pointer;
+    }
+
+    #answerButton {
+        background-color: navy;
+        color: white;
+    }
+
+    #nextButton {
+        background-color: lightgray;
+    }
+
+    #result {
+        font-size: 20px;
+        font-weight: bold;
+        margin-top: 20px;
+        min-height: 30px;
+    }
+
+    .score {
+        font-size: 18px;
+        margin-top: 20px;
+    }
+
+    select {
+        font-size: 16px;
+        padding: 7px;
+    }
+
+    .settings {
+        margin-bottom: 25px;
+        padding: 18px;
+        background: #f3f5f8;
+        border-radius: 10px;
+    }
+
+    .setting-title {
+        font-weight: bold;
+        margin-bottom: 12px;
+    }
+
+    .unit-options {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 10px 18px;
+        margin-bottom: 16px;
+    }
+
+    .unit-options label {
+        display: inline-flex;
+        align-items: center;
+        gap: 5px;
+    }
+
+    .unit-options input {
+        width: auto;
+        max-width: none;
+        margin: 0;
+    }
+
+    .setting-row {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+        gap: 8px;
+    }
+
+    .setting-row button {
+        margin: 0;
+        background: #2e6b45;
+        color: white;
+    }
+</style>
+</head>
+
+<body>
+<div class="quiz">
+    <h1>英単語クイズ</h1>
+
+    <div class="info">
+        例文の日本語を読んで、穴に入る英単語を入力してください。
+    </div>
+
+    <div class="settings">
+        <div class="setting-title">出題するUnit（複数選択可）</div>
+        <div class="unit-options">
+            <label><input type="checkbox" name="unit" value="116" checked> Unit 116</label>
+            <label><input type="checkbox" name="unit" value="117" checked> Unit 117</label>
+            <label><input type="checkbox" name="unit" value="118" checked> Unit 118</label>
+            <label><input type="checkbox" name="unit" value="119" checked> Unit 119</label>
+            <label><input type="checkbox" name="unit" value="120" checked> Unit 120</label>
+        </div>
+        <div class="setting-row">
+            <label for="order">出題順：</label>
+            <select id="order">
+                <option value="sequential">順番に出題</option>
+                <option value="random">ランダムに出題</option>
+            </select>
+            <button id="startButton" onclick="startQuiz()">開始</button>
+        </div>
+    </div>
+
+    <div id="japanese" class="japanese"></div>
+    <div id="english" class="english"></div>
+
+    <input id="answer" type="text" autocomplete="off" placeholder="英単語を入力">
+
+    <br>
+
+    <button id="answerButton" onclick="checkAnswer()">答える</button>
+    <button id="nextButton" onclick="nextQuestion()">次の問題</button>
+
+    <div id="result"></div>
+    <div id="score" class="score"></div>
+
+    <div id="finishOptions">
+        <button id="retryWrongButton" class="primary" onclick="retryWrong()">間違った問題を解きなおす</button>
+    </div>
+
+</div>
+
+<script>
+const words = [
+    // Unit 116
+    {
+        unit: "116",
+        jp: "彼らは敵に対して勇敢に戦った。",
+        en: "They fought bravely against the ______.",
+        answer: "enemy"
+    },
+    {
+        unit: "116",
+        jp: "指導者たちは国家間の衝突を避けるために努力しなければならない。",
+        en: "Leaders must make efforts to avoid a ______ between nations.",
+        answer: "conflict"
+    },
+    {
+        unit: "116",
+        jp: "ナポレオンは1815年にワーテルローで敗北した。",
+        en: "Napoleon was ______ at Waterloo in 1815.",
+        answer: "defeated"
+    },
+    {
+        unit: "116",
+        jp: "日本人のハワイへの移住は1860年代に始まった。",
+        en: "Japanese ______ to Hawaii began in the 1860s.",
+        answer: "immigration"
+    },
+    {
+        unit: "116",
+        jp: "日本の国民は多くの国で入国時にビザを必要としない。",
+        en: "Japanese ______ do not need visas to enter many countries.",
+        answer: "citizens"
+    },
+    {
+        unit: "116",
+        jp: "難民たちは戦争の犠牲者である場合が多い。",
+        en: "______ are often victims of wars.",
+        answer: "Refugees"
+    },
+    {
+        unit: "116",
+        jp: "フランス革命は1789年に起こった。",
+        en: "The French ______ took place in 1789.",
+        answer: "Revolution"
+    },
+    {
+        unit: "116",
+        jp: "インドはかつてイギリスの植民地だった。",
+        en: "India used to be a British ______.",
+        answer: "colony"
+    },
+    {
+        unit: "116",
+        jp: "犯人は明日、裁判所に出頭する予定だ。",
+        en: "The criminal will appear in ______ tomorrow.",
+        answer: "court"
+    },
+    {
+        unit: "116",
+        jp: "裁判官は彼女に1,000ドルの支払いを命じた。",
+        en: "The ______ ordered her to pay 1,000 dollars.",
+        answer: "judge"
+    },
+    {
+        unit: "116",
+        jp: "その男はDVDの違法コピーを売ったことで逮捕された。",
+        en: "The man was arrested for selling ______ copies of DVDs.",
+        answer: "illegal"
+    },
+    {
+        unit: "116",
+        jp: "彼は殺人で有罪となった。",
+        en: "He was found ______ of murder.",
+        answer: "guilty"
+    },
+    {
+        unit: "116",
+        jp: "証拠によって彼の無罪が証明された。",
+        en: "Because of the evidence, he was proved ______.",
+        answer: "innocent"
+    },
+
+    // Unit 117
+    {
+        unit: "117",
+        jp: "彼は明るい性格だ。",
+        en: "He has a ______ character.",
+        answer: "cheerful"
+    },
+    {
+        unit: "117",
+        jp: "私の母は穏やかな性格だ。",
+        en: "My mother has a calm ______.",
+        answer: "personality"
+    },
+    {
+        unit: "117",
+        jp: "ウサギの主な特徴は、その長い耳である。",
+        en: "The main ______ of a rabbit is its long ears.",
+        answer: "characteristic"
+    },
+    {
+        unit: "117",
+        jp: "このカメラの特徴の1つは、その軽さだ。",
+        en: "One ______ of this camera is its light weight.",
+        answer: "feature"
+    },
+    {
+        unit: "117",
+        jp: "いくつかの国では、人々が言論の自由を持っていない。",
+        en: "In some countries, people do not have ______ of speech.",
+        answer: "freedom"
+    },
+    {
+        unit: "117",
+        jp: "人々は歴史を通じて、たびたび自由のために戦ってきた。",
+        en: "People have often fought for their ______ throughout history.",
+        answer: "liberty"
+    },
+    {
+        unit: "117",
+        jp: "彼女は自分が非常に困難な状況にあることに気づいた。",
+        en: "She found herself in a very difficult ______.",
+        answer: "situation"
+    },
+    {
+        unit: "117",
+        jp: "私の状況が変わったなら、もっと旅行に出られるかもしれない。",
+        en: "If my ______ change, I may be able to travel more.",
+        answer: "circumstances"
+    },
+    {
+        unit: "117",
+        jp: "物理学科の建物はどれですか。",
+        en: "Which building is the Department of ______?",
+        answer: "Physics"
+    },
+    {
+        unit: "117",
+        jp: "その2国間の緊張は依然高まっている。",
+        en: "The ______ is still high between the two countries.",
+        answer: "tension"
+    },
+    {
+        unit: "117",
+        jp: "多くの映画スターは大邸宅に住んでいる。",
+        en: "Many movie stars live in ______.",
+        answer: "mansions"
+    },
+
+    // Unit 118
+    {
+        unit: "118",
+        jp: "いかなる国も核兵器を保有すべきではないという考えに賛成ですか。",
+        en: "Do you agree that no country should ______ nuclear weapons?",
+        answer: "possess"
+    },
+    {
+        unit: "118",
+        jp: "平和を保つために軍事力は必要だろうか。",
+        en: "Do we need ______ force to maintain peace?",
+        answer: "military"
+    },
+    {
+        unit: "118",
+        jp: "最新の時事問題に遅れずについていくために、私は毎日新聞を読んでいます。",
+        en: "I read a newspaper every day to keep up with current ______.",
+        answer: "affairs"
+    },
+    {
+        unit: "118",
+        jp: "いかなる状況においても、人種差別が許されてはならない。",
+        en: "Racial ______ must not be permitted under any circumstances.",
+        answer: "discrimination"
+    },
+    {
+        unit: "118",
+        jp: "いじめはとても深刻な倫理的問題だ。",
+        en: "Bullying is a very serious moral ______.",
+        answer: "issue"
+    },
+    {
+        unit: "118",
+        jp: "私たちはその実験をしたあとでレポートを書かなければならない。",
+        en: "We have to write a report after doing the ______.",
+        answer: "experiment"
+    },
+    {
+        unit: "118",
+        jp: "私の父は海外勤務の経験が豊富だ。",
+        en: "My father has a lot of ______ working abroad.",
+        answer: "experience"
+    },
+    {
+        unit: "119",
+        jp: "多くの人が日本の試験を暗記することができる。",
+        en: "Many people can ______ the answers for many exams in Japan.",
+        answer: "memorize"
+    },
+    {
+        unit: "119",
+        jp: "あなたより成功している人をうらやむべきではない。",
+        en: "You shouldn't ______ people when they are more successful than you.",
+        answer: "envy"
+    },
+    {
+        unit: "119",
+        jp: "彼はその軍事行動を行った2つの理由について言及した。",
+        en: "He ______ two reasons why we should oppose any military action.",
+        answer: "mentioned"
+    },
+    {
+        unit: "119",
+        jp: "国際社会は世界平和を確立しようとした。",
+        en: "The United Nations was established to ______ world peace.",
+        answer: "seek"
+    },
+    {
+        unit: "119",
+        jp: "あなたが報告書を完成させたと仮定しよう。",
+        en: "Let's ______ that you have finished your report.",
+        answer: "assume"
+    },
+    {
+        unit: "119",
+        jp: "私の両親はいつも私の髪型を批判する。",
+        en: "My parents always ______ my hairstyle.",
+        answer: "criticize"
+    },
+    {
+        unit: "119",
+        jp: "学生たちは宿題をしなかったことを謝った。",
+        en: "The students ______ for not doing their homework.",
+        answer: "apologized"
+    },
+    {
+        unit: "119",
+        jp: "病院にいたとき、友達が私を見舞いに来て元気づけてくれた。",
+        en: "When I was in the hospital, my friends visited me to ______ me up.",
+        answer: "cheer"
+    },
+    {
+        unit: "119",
+        jp: "バドミントン部は放課後に体育館で練習する。",
+        en: "The badminton club ______ in the gymnasium after school.",
+        answer: "practices"
+    },
+    {
+        unit: "119",
+        jp: "新しいスタジアムはオリンピックの試合のために建設されている。",
+        en: "A new ______ is being built for the Olympic games.",
+        answer: "stadium"
+    },
+    {
+        unit: "119",
+        jp: "どのくらいの頻度で劇場に行きますか。",
+        en: "How often do you go to the ______?",
+        answer: "theater"
+    },
+    {
+        unit: "119",
+        jp: "私の夢はプロのスポーツ選手になることだ。",
+        en: "My dream is to be a professional ______.",
+        answer: "athlete"
+    },
+    {
+        unit: "119",
+        jp: "その番組には大勢の観客がいた。",
+        en: "There was a large ______ on the last night of the show.",
+        answer: "audience"
+    },
+    {
+        unit: "120",
+        jp: "走者たちはレースを始める合図を待った。",
+        en: "The runners waited for the ______ to start the race.",
+        answer: "signal"
+    },
+    {
+        unit: "120",
+        jp: "美しい夕焼けは良い天気の兆しだ。",
+        en: "A beautiful sunset is a ______ of good weather.",
+        answer: "sign"
+    },
+    {
+        unit: "120",
+        jp: "誰かが壁に汚れた跡を残した。",
+        en: "Someone left dirty ______ on the wall.",
+        answer: "marks"
+    },
+    {
+        unit: "120",
+        jp: "整備士は車の修理のための多くの道具を必要とする。",
+        en: "Mechanics need many ______ for repairing cars.",
+        answer: "tools"
+    },
+    {
+        unit: "120",
+        jp: "何か楽器を演奏できますか。",
+        en: "Can you play any musical ______?",
+        answer: "instruments"
+    },
+    {
+        unit: "120",
+        jp: "親の主な義務は、自分の子どもを守ることだ。",
+        en: "A parent's main ______ is to protect their children.",
+        answer: "duty"
+    },
+    {
+        unit: "120",
+        jp: "私は18歳だから、次の選挙で投票する責任があります。",
+        en: "I'm 18, so it's my ______ to vote in the coming election.",
+        answer: "responsibility"
+    },
+    {
+        unit: "120",
+        jp: "私たちが学校に遅れたのは私のせいだった。",
+        en: "It was my ______ that we were late for school.",
+        answer: "fault"
+    },
+    {
+        unit: "120",
+        jp: "先生は、私たちがどれだけ忙しくても読書を重視する。",
+        en: "Our teacher puts ______ on reading books however busy we are.",
+        answer: "stress"
+    },
+    {
+        unit: "120",
+        jp: "英語の授業ではコミュニケーションをもっと重視すべきだ。",
+        en: "We should put more ______ on communication in English lessons.",
+        answer: "emphasis"
+    },
+    {
+        unit: "120",
+        jp: "小エビにはたくさんのカルシウムが含まれている。",
+        en: "Shrimps ______ a lot of calcium.",
+        answer: "contain"
+    },
+    {
+        unit: "120",
+        jp: "国連の主要な目的は、世界の平和を維持することです。",
+        en: "The main purpose of the United Nations is to ______ peace on earth.",
+        answer: "maintain"
+    }
+];
+
+let currentList = words.slice();
+let currentIndex = 0;
+let correct = 0;
+let answered = false;
+let wrongQuestions = [];
+let quizStarted = false;
+
+function startQuiz() {
+    const selectedUnits = Array.from(
+        document.querySelectorAll('input[name="unit"]:checked')
+    ).map(input => input.value);
+
+    if (selectedUnits.length === 0) {
+        document.getElementById("result").textContent = "Unitを1つ以上選択してください。";
+        return;
+    }
+
+    currentList = words.filter(word => selectedUnits.includes(word.unit));
+
+    if (document.getElementById("order").value === "random") {
+        for (let i = currentList.length - 1; i > 0; i--) {
+            const j = Math.floor(Math.random() * (i + 1));
+            [currentList[i], currentList[j]] = [currentList[j], currentList[i]];
+        }
+    }
+
+    currentIndex = 0;
+    correct = 0;
+    answered = false;
+    wrongQuestions = [];
+    quizStarted = true;
+    document.getElementById("finishOptions").style.display = "none";
+    showQuestion();
+}
+
+function showQuestion() {
+    const q = currentList[currentIndex];
+
+    document.getElementById("japanese").textContent = q.jp;
+    document.getElementById("english").textContent = q.en;
+    document.getElementById("answer").value = "";
+    document.getElementById("answer").focus();
+    document.getElementById("result").textContent = "";
+    answered = false;
+
+    document.getElementById("score").textContent =
+        `${currentIndex + 1} / ${currentList.length}　正解：${correct}`;
+}
+
+function checkAnswer() {
+    if (answered) return;
+
+    const input = document.getElementById("answer").value.trim();
+    const answer = currentList[currentIndex].answer;
+
+    if (input === answer) {
+        document.getElementById("result").textContent = "○ 正解！";
+        correct++;
+    } else {
+        document.getElementById("result").textContent =
+            `× 不正解　答え：${answer}`;
+        if (!wrongQuestions.includes(currentList[currentIndex])) {
+            wrongQuestions.push(currentList[currentIndex]);
+        }
+    }
+
+    answered = true;
+
+    document.getElementById("score").textContent =
+        `${currentIndex + 1} / ${currentList.length}　正解：${correct}`;
+}
+
+function nextQuestion() {
+    if (currentIndex < currentList.length - 1) {
+        currentIndex++;
+        showQuestion();
+    } else {
+        document.getElementById("result").textContent =
+            `終了！ ${currentList.length}問中 ${correct}問正解`;
+        document.getElementById("finishOptions").style.display = "block";
+        document.getElementById("retryWrongButton").disabled = wrongQuestions.length === 0;
+        document.getElementById("retryWrongButton").textContent = "間違った問題を解きなおす";
+    }
+}
+
+function retryWrong() {
+    if (wrongQuestions.length === 0) return;
+    currentList = wrongQuestions.slice();
+    currentIndex = 0;
+    correct = 0;
+    answered = false;
+    wrongQuestions = [];
+    document.getElementById("finishOptions").style.display = "none";
+    showQuestion();
+}
+
+
+document.getElementById("answer").addEventListener("keydown", function(event) {
+    if (event.key === "Enter") {
+        if (!answered) {
+            checkAnswer();
+        } else {
+            nextQuestion();
+        }
+    }
+});
+
+showQuestion();
+</script>
+</body>
+</html>

@@ -1,642 +1,1124 @@
-<!DOCTYPE html>
-<html lang="ja">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>英単語クイズ</title>
-<style>
-    body {
-        font-family: Meiryo, sans-serif;
-        background-color: whitesmoke;
-        margin: 0;
-        padding: 30px;
-    }
-
-    .quiz {
-        max-width: 850px;
-        margin: auto;
-        background: white;
-        padding: 35px;
-        border-radius: 18px;
-        box-shadow: 0 5px 20px gray;
-    }
-
-    h1 {
-        margin-top: 0;
-        color: navy;
-    }
-
-    .info {
-        color: gray;
-        margin-bottom: 25px;
-    }
-
-    .japanese {
-        font-size: 20px;
-        margin-bottom: 25px;
-        line-height: 1.7;
-    }
-
-    .english {
-        font-size: 25px;
-        line-height: 1.7;
-        margin-bottom: 25px;
-    }
-
-    .blank {
-        color: navy;
-        letter-spacing: 3px;
-    }
-
-    input {
-        width: 90%;
-        max-width: 600px;
-        font-size: 22px;
-        padding: 12px;
-        border: 2px solid gray;
-        border-radius: 8px;
-    }
-
-    button {
-        font-size: 18px;
-        padding: 10px 22px;
-        margin: 12px 5px 0 0;
-        border: none;
-        border-radius: 8px;
-        cursor: pointer;
-    }
-
-    #answerButton {
-        background-color: navy;
-        color: white;
-    }
-
-    #nextButton {
-        background-color: lightgray;
-    }
-
-    #result {
-        font-size: 20px;
-        font-weight: bold;
-        margin-top: 20px;
-        min-height: 30px;
-    }
-
-    .score {
-        font-size: 18px;
-        margin-top: 20px;
-    }
-
-    select {
-        font-size: 16px;
-        padding: 7px;
-    }
-
-    .settings {
-        margin-bottom: 25px;
-        padding: 18px;
-        background: #f3f5f8;
-        border-radius: 10px;
-    }
-
-    .setting-title {
-        font-weight: bold;
-        margin-bottom: 12px;
-    }
-
-    .unit-options {
-        display: flex;
-        flex-wrap: wrap;
-        gap: 10px 18px;
+<!DOCTYPE html>                                                                                    
+<html lang="ja">                                                                                   
+<head>                                                                                             
+<meta charset="UTF-8">                                                                             
+<meta name="viewport" content="width=device-width, initial-scale=1.0">                             
+<title>英単語クイズ</title>                                                                             
+<style>                                                                                            
+    body {                                                                                          
+        font-family: Meiryo, sans-serif;                                                            
+        background-color: whitesmoke;                                                               
+        margin: 0;                                                                                  
+        padding: 30px;                                                                              
+    }                                                                                               
+<br>
+    .quiz {                                                                                         
+        max-width: 850px;                                                                           
+        margin: auto;                                                                               
+        background: white;                                                                          
+        padding: 35px;                                                                              
+        border-radius: 18px;                                                                        
+        box-shadow: 0 5px 20px gray;                                                                
+    }                                                                                               
+<br>
+    h1 {                                                                                            
+        margin-top: 0;                                                                              
+        color: navy;                                                                                
+    }                                                                                               
+<br>
+    .info {                                                                                         
+        color: gray;                                                                                
+        margin-bottom: 25px;                                                                        
+    }                                                                                               
+<br>
+    .japanese {                                                                                     
+        font-size: 20px;                                                                            
+        margin-bottom: 25px;                                                                        
+        line-height: 1.7;                                                                           
+    }                                                                                               
+<br>
+    .english {                                                                                      
+        font-size: 25px;                                                                            
+        line-height: 1.7;                                                                           
+        margin-bottom: 25px;                                                                        
+    }                                                                                               
+<br>
+    .blank {                                                                                        
+        color: navy;                                                                                
+        letter-spacing: 3px;                                                                        
+    }                                                                                               
+<br>
+    input {                                                                                         
+        width: 90%;                                                                                 
+        max-width: 600px;                                                                           
+        font-size: 22px;                                                                            
+        padding: 12px;                                                                              
+        border: 2px solid gray;                                                                     
+        border-radius: 8px;                                                                         
+    }                                                                                               
+<br>
+    button {                                                                                        
+        font-size: 18px;                                                                            
+        padding: 10px 22px;                                                                         
+        margin: 12px 5px 0 0;                                                                       
+        border: none;                                                                               
+        border-radius: 8px;                                                                         
+        cursor: pointer;                                                                            
+    }                                                                                               
+<br>
+    #answerButton {                                                                                 
+        background-color: navy;                                                                     
+        color: white;                                                                               
+    }                                                                                               
+<br>
+    #nextButton {                                                                                   
+        background-color: lightgray;                                                                
+    }                                                                                               
+<br>
+    #result {                                                                                       
+        font-size: 20px;                                                                            
+        font-weight: bold;                                                                          
+        margin-top: 20px;                                                                           
+        min-height: 30px;                                                                           
+    }                                                                                               
+<br>
+    .score {                                                                                        
+        font-size: 18px;                                                                            
+        margin-top: 20px;                                                                           
+    }                                                                                               
+<br>
+    select {                                                                                        
+        font-size: 16px;                                                                            
+        padding: 7px;                                                                               
+    }                                                                                               
+<br>
+    .settings {                                                                                     
+        margin-bottom: 25px;                                                                        
+        padding: 18px;                                                                              
+        background: #f3f5f8;                                                                        
+        border-radius: 10px;                                                                        
+    }                                                                                               
+<br>
+    .setting-title {                                                                                
+        font-weight: bold;                                                                          
+        margin-bottom: 12px;                                                                        
+    }                                                                                               
+<br>
+    .unit-options {                                                                                 
+        display: flex;                                                                              
+        flex-wrap: wrap;                                                                            
+        gap: 10px 18px;                                                                             
+        margin-bottom: 16px;                                                                        
+    }                                                                                               
+<br>
+    .unit-options label {                                                                           
+        display: inline-flex;                                                                       
+        align-items: center;                                                                        
+        gap: 5px;                                                                                   
+    }                                                                                               
+<br>
+    .unit-options input {                                                                           
+        width: auto;                                                                                
+        max-width: none;                                                                            
+        margin: 0;                                                                                  
+    }                                                                                               
+<br>
+    .unit-groups {
+        display: grid;
+        gap: 12px;
         margin-bottom: 16px;
     }
 
-    .unit-options label {
-        display: inline-flex;
-        align-items: center;
-        gap: 5px;
+    .unit-group {
+        border: 1px solid #d5dbe2;
+        border-radius: 10px;
+        background: white;
+        overflow: hidden;
     }
 
-    .unit-options input {
+    .unit-group > summary {
+        padding: 12px 14px;
+        cursor: pointer;
+        font-weight: bold;
+        background: #eef2f6;
+        list-style-position: inside;
+    }
+
+    .unit-group[open] > summary {
+        border-bottom: 1px solid #d5dbe2;
+    }
+
+    .group-label {
+        display: inline-flex;
+        align-items: center;
+        gap: 7px;
+        cursor: pointer;
+    }
+
+    .group-label input {
         width: auto;
         max-width: none;
         margin: 0;
     }
 
-    .setting-row {
-        display: flex;
-        flex-wrap: wrap;
-        align-items: center;
-        gap: 8px;
+    .unit-group .unit-options {
+        padding: 14px;
+        margin-bottom: 0;
     }
 
-    .setting-row button {
-        margin: 0;
-        background: #2e6b45;
-        color: white;
-    }
-</style>
-</head>
-
-<body>
-<div class="quiz">
-    <h1>英単語クイズ</h1>
-
-    <div class="info">
-        例文の日本語を読んで、穴に入る英単語を入力してください。
-    </div>
-
-    <div class="settings">
+    .setting-row {                                                                                  
+        display: flex;                                                                              
+        flex-wrap: wrap;                                                                            
+        align-items: center;                                                                        
+        gap: 8px;                                                                                   
+    }                                                                                               
+<br>
+    .setting-row button {                                                                           
+        margin: 0;                                                                                  
+        background: #2e6b45;                                                                        
+        color: white;                                                                               
+    }                                                                                               
+</style>                                                                                           
+</head>                                                                                            
+<br>
+<body>                                                                                             
+<div class="quiz">                                                                                 
+    <h1>英単語クイズ</h1>                                                                               
+<br>
+    <div class="info">                                                                             
+        例文の日本語を読んで、空欄に入る英単語・連語を入力してください。複数語の連語はスペースまたは「/」で区切って入力できます。                                                                
+    </div>                                                                                         
+<br>
+    <div class="settings">                                                                         
         <div class="setting-title">出題するUnit（複数選択可）</div>
-        <div class="unit-options">
-            <label><input type="checkbox" name="unit" value="116" checked> Unit 116</label>
-            <label><input type="checkbox" name="unit" value="117" checked> Unit 117</label>
-            <label><input type="checkbox" name="unit" value="118" checked> Unit 118</label>
-            <label><input type="checkbox" name="unit" value="119" checked> Unit 119</label>
-            <label><input type="checkbox" name="unit" value="120" checked> Unit 120</label>
+        <div class="unit-groups">
+            <details class="unit-group" open>
+                <summary>
+                    <label class="group-label" onclick="event.stopPropagation()">
+                        <input type="checkbox" class="group-checkbox" checked>
+                        Unit 116〜120
+                    </label>
+                </summary>
+                <div class="unit-options">
+                    <label><input type="checkbox" name="unit" value="116" checked> Unit 116</label>
+                    <label><input type="checkbox" name="unit" value="117" checked> Unit 117</label>
+                    <label><input type="checkbox" name="unit" value="118" checked> Unit 118</label>
+                    <label><input type="checkbox" name="unit" value="119" checked> Unit 119</label>
+                    <label><input type="checkbox" name="unit" value="120" checked> Unit 120</label>
+                </div>
+            </details>
+            <details class="unit-group" open>
+                <summary>
+                    <label class="group-label" onclick="event.stopPropagation()">
+                        <input type="checkbox" class="group-checkbox" checked>
+                        Unit 121〜125
+                    </label>
+                </summary>
+                <div class="unit-options">
+                    <label><input type="checkbox" name="unit" value="121" checked> Unit 121</label>
+                    <label><input type="checkbox" name="unit" value="122" checked> Unit 122</label>
+                    <label><input type="checkbox" name="unit" value="123" checked> Unit 123</label>
+                    <label><input type="checkbox" name="unit" value="124" checked> Unit 124</label>
+                    <label><input type="checkbox" name="unit" value="125" checked> Unit 125</label>
+                </div>
+            </details>
         </div>
-        <div class="setting-row">
-            <label for="order">出題順：</label>
-            <select id="order">
-                <option value="sequential">順番に出題</option>
-                <option value="random">ランダムに出題</option>
-            </select>
-            <button id="startButton" onclick="startQuiz()">開始</button>
-        </div>
-    </div>
-
-    <div id="japanese" class="japanese"></div>
-    <div id="english" class="english"></div>
-
-    <input id="answer" type="text" autocomplete="off" placeholder="英単語を入力">
-
-    <br>
-
-    <button id="answerButton" onclick="checkAnswer()">答える</button>
-    <button id="nextButton" onclick="nextQuestion()">次の問題</button>
-
-    <div id="result"></div>
-    <div id="score" class="score"></div>
-
-    <div id="finishOptions">
+        <div class="setting-row">                                                                  
+            <label for="order">出題順：</label>                                                       
+            <select id="order">                                                                    
+                <option value="sequential">順番に出題</option>                                         
+                <option value="random">ランダムに出題</option>                                           
+            </select>                                                                              
+            <button id="startButton" onclick="startQuiz()">開始</button>                            
+        </div>                                                                                     
+    </div>                                                                                         
+<br>
+    <div id="japanese" class="japanese"></div>                                                    
+    <div id="english" class="english"></div>                                                      
+<br>
+    <input id="answer" type="text" autocomplete="off" placeholder="英単語を入力">                        
+<br>
+    <br>                                                                                           
+<br>
+    <button id="answerButton" onclick="checkAnswer()">答える</button>                                
+    <button id="nextButton" onclick="nextQuestion()">次の問題</button>                                
+<br>
+    <div id="result"></div>                                                                       
+    <div id="score" class="score"></div>                                                          
+<br>
+    <div id="finishOptions">                                                                       
         <button id="retryWrongButton" class="primary" onclick="retryWrong()">間違った問題を解きなおす</button>
-    </div>
+    </div>                                                                                         
+<br>
+</div>                                                                                             
+<br>
+<script>                                                                                           
+const words = [                                                                                     
+    // Unit 116                                                                                     
+    {                                                                                               
+        unit: "116",                                                                                
+        jp: "彼らは勇敢に敵と戦った。",                                                                         
+        en: "They fought bravely against the ______.",                                        
+        answer: "enemy"                                                                             
+    },                                                                                              
+    {                                                                                               
+        unit: "116",                                                                                
+        jp: "指導者たちは国家間の衝突を避けるために努力しなければならない。",                                                      
+        en: "Leaders must make efforts to avoid a ______ between nations.",                   
+        answer: "conflict"                                                                          
+    },                                                                                              
+    {                                                                                               
+        unit: "116",                                                                                
+        jp: "ナポレオンは1815年にワーテルローで敗北した。",                                                             
+        en: "Napoleon was ______ at Waterloo in 1815.",                                       
+        answer: "defeated"                                                                          
+    },                                                                                              
+    {                                                                                               
+        unit: "116",                                                                                
+        jp: "日本人のハワイへの移住は1860年代に始まった。",                                                             
+        en: "Japanese ______ to Hawaii began in the 1860s.",                                  
+        answer: "immigration"                                                                       
+    },                                                                                              
+    {                                                                                               
+        unit: "116",                                                                                
+        jp: "日本の国民は多くの国で入国時にビザを必要としない。",                                                            
+        en: "Japanese ______ do not need visas to enter many countries.",                     
+        answer: "citizens"                                                                          
+    },                                                                                              
+    {                                                                                               
+        unit: "116",                                                                                
+        jp: "難民たちは戦争の犠牲者である場合が多い。",                                                                 
+        en: "______ are often victims of wars.",                                              
+        answer: "Refugees"                                                                          
+    },                                                                                              
+    {                                                                                               
+        unit: "116",                                                                                
+        jp: "フランス革命は1789年に起こった。",                                                                   
+        en: "The French ______ took place in 1789.",                                          
+        answer: "Revolution"                                                                        
+    },                                                                                              
+    {                                                                                               
+        unit: "116",                                                                                
+        jp: "インドはかつてイギリスの植民地だった。",                                                                  
+        en: "India used to be a British ______.",                                             
+        answer: "colony"                                                                            
+    },                                                                                              
+    {                                                                                               
+        unit: "116",                                                                                
+        jp: "犯人は明日裁判所に出頭する予定だ。",                                                                    
+        en: "The criminal will appear in ______ tomorrow.",                                   
+        answer: "court"                                                                             
+    },                                                                                              
+    {                                                                                               
+        unit: "116",                                                                                
+        jp: "裁判官は彼女に1,000ドルの支払いを命じた。",                                                              
+        en: "The ______ ordered her to pay 1,000 dollars.",                                   
+        answer: "judge"                                                                             
+    },                                                                                              
+    {                                                                                               
+        unit: "116",                                                                                
+        jp: "その男はDVDの違法コピーを売ったことで逮捕された。",                                                           
+        en: "The man was arrested for selling ______ copies of DVDs.",                        
+        answer: "illegal"                                                                           
+    },                                                                                              
+    {                                                                                               
+        unit: "116",                                                                                
+        jp: "彼は殺人で有罪となった。",                                                                         
+        en: "He was found ______ of murder.",                                                 
+        answer: "guilty"                                                                            
+    },                                                                                              
+    {                                                                                               
+        unit: "116",                                                                                
+        jp: "証拠によって彼の無罪が証明された。",                                                                    
+        en: "Because of the evidence, he was proved ______.",                                 
+        answer: "innocent"                                                                          
+    },                                                                                              
 
-</div>
+    // Unit 117                                                                                     
+    {                                                                                               
+        unit: "117",                                                                                
+        jp: "彼は明るい性格だ。",                                                                            
+        en: "He has a cheerful ______.",                                                      
+        answer: "character"                                                                         
+    },                                                                                              
+    {                                                                                               
+        unit: "117",                                                                                
+        jp: "私の母は穏やかな性格だ。",                                                                         
+        en: "My mother has a calm ______.",                                                   
+        answer: "personality"                                                                       
+    },                                                                                              
+    {                                                                                               
+        unit: "117",                                                                                
+        jp: "ウサギの主な特徴は、その長い耳である。",                                                                  
+        en: "The main ______ of a rabbit is its long ears.",                                  
+        answer: "characteristic"                                                                    
+    },                                                                                              
+    {                                                                                               
+        unit: "117",                                                                                
+        jp: "このカメラの特徴の1つは、その軽さだ。",                                                                  
+        en: "One ______ of this camera is its light weight.",                                 
+        answer: "feature"                                                                           
+    },                                                                                              
+    {                                                                                               
+        unit: "117",                                                                                
+        jp: "人々が言論の自由を持たない国もある。",                                                                   
+        en: "In some countries, people do not have ______ of speech.",                        
+        answer: "freedom"                                                                           
+    },                                                                                              
+    {                                                                                               
+        unit: "117",                                                                                
+        jp: "人々は歴史を通じて、たびたび自由のために戦ってきた。",                                                           
+        en: "People have often fought for their ______ throughout history.",                  
+        answer: "liberty"                                                                           
+    },                                                                                              
+    {                                                                                               
+        unit: "117",                                                                                
+        jp: "彼女は自分が非常に困難な立場にいることに気づいた。",                                                            
+        en: "She found herself in a very difficult ______.",                                  
+        answer: "situation"                                                                         
+    },                                                                                              
+    {                                                                                               
+        unit: "117",                                                                                
+        jp: "私の状況が変わったならもっと旅行に出られるかもしれない。",                                                         
+        en: "If my ______ change, I may be able to travel more.",                             
+        answer: "circumstances"                                                                     
+    },                                                                                              
+    {                                                                                               
+        unit: "117",                                                                                
+        jp: "物理学科の建物はどれですか。",                                                                       
+        en: "Which building is the ______ of Physics?",                                       
+        answer: "Department"                                                                        
+    },                                                                                              
+    {                                                                                               
+        unit: "117",                                                                                
+        jp: "その2国間の緊張は依然高まっている。",                                                                   
+        en: "The ______ is still high between the two countries.",                            
+        answer: "tension"                                                                           
+    },                                                                                              
+    {                                                                                               
+        unit: "117",                                                                                
+        jp: "多くの映画スターは大邸宅に住んでいる。",                                                                  
+        en: "Many movie stars live in ______.",                                               
+        answer: "mansions"                                                                          
+    },                                                                                              
 
-<script>
-const words = [
-    // Unit 116
+    // Unit 118                                                                                     
+    {                                                                                               
+        unit: "118",                                                                                
+        jp: "いかなる国も核兵器を保有すべきではないという考えに賛成ですか。",                                                      
+        en: "Do you agree that no country should ______ ______ ______?",          
+        answer: "possess nuclear weapons"                                                           
+    },                                                                                              
+    {                                                                                               
+        unit: "118",                                                                                
+        jp: "平和を保つために軍事力は必要だろうか。",                                                                  
+        en: "Do we need ______ ______ to maintain peace?",                              
+        answer: "military force"                                                                    
+    },                                                                                              
+    {                                                                                               
+        unit: "118",                                                                                
+        jp: "最新の情報（時事問題）に遅れずについていくために、私は毎日新聞を読んでいます。",                                              
+        en: "I read a newspaper every day to keep up with ______ ______.",              
+        answer: "current affairs"                                                                   
+    },                                                                                              
+    {                                                                                               
+        unit: "118",                                                                                
+        jp: "いかなる状況においても、人種差別が許されてはならない。",                                                          
+        en: "______ ______ must not be permitted under any circumstances.",             
+        answer: "Racial discrimination"                                                             
+    },                                                                                              
+    {                                                                                               
+        unit: "118",                                                                                
+        jp: "いじめはとても深刻な倫理的問題だ。",                                                                    
+        en: "Bullying is a very serious ______ ______.",                                
+        answer: "moral issue"                                                                       
+    },                                                                                              
+    {                                                                                               
+        unit: "118",                                                                                
+        jp: "私たちはその実験をしたあとでレポートを書かなければならない。",                                                       
+        en: "We have to write a report after doing the ______.",                              
+        answer: "experiment"                                                                        
+    },                                                                                              
+    {                                                                                               
+        unit: "118",                                                                                
+        jp: "私の父は海外勤務の経験が豊富だ。",                                                                     
+        en: "My father has a lot of ______ working abroad.",                                  
+        answer: "experience"                                                                        
+    },                                                                                              
+    {                                                                                               
+        unit: "119",                                                                                
+        jp: "日本では、多くの試験でどれだけ暗記できるかが重要になる。",                                                         
+        en: "How much one can ______ is important for many exams in Japan.",                  
+        answer: "memorize"                                                                          
+    },                                                                                              
+    {                                                                                               
+        unit: "119",                                                                                
+        jp: "あなたより成功しているからといって、人をうらやむべきではない。",                                                      
+        en: "You shouldn't ______ people when they are more successful than you.",            
+        answer: "envy"                                                                              
+    },                                                                                              
+    {                                                                                               
+        unit: "119",                                                                                
+        jp: "彼はどんな軍事行動にも反対しなければならない2つの理由に言及した。",                                                    
+        en: "He ______ two reasons why we should oppose any military action.",                
+        answer: "mentioned"                                                                         
+    },                                                                                              
+    {                                                                                               
+        unit: "119",                                                                                
+        jp: "国連は世界平和を追求するために設立された。",                                                                
+        en: "The United Nations was established to ______ world peace.",                      
+        answer: "seek"                                                                              
+    },                                                                                              
+    {                                                                                               
+        unit: "119",                                                                                
+        jp: "あなたは当然レポートを書き終えたことと思います。",                                                             
+        en: "I ______ that you have finished your report.",                                   
+        answer: "assume"                                                                            
+    },                                                                                              
+    {                                                                                               
+        unit: "119",                                                                                
+        jp: "私の両親はいつも私の髪型を批判する。",                                                                   
+        en: "My parents always ______ my hairstyle.",                                         
+        answer: "criticize"                                                                         
+    },                                                                                              
+    {                                                                                               
+        unit: "119",                                                                                
+        jp: "その生徒たちは宿題をしなかったことについて謝罪しました。",                                                         
+        en: "The students ______ for not doing their homework.",                              
+        answer: "apologized"                                                                        
+    },                                                                                              
+    {                                                                                               
+        unit: "119",                                                                                
+        jp: "入院中に友人たちが見舞いに来て私を元気づけてくれた。",                                                           
+        en: "When I was in the hospital, my friends visited me to ______ me up.",             
+        answer: "cheer"                                                                             
+    },                                                                                              
+    {                                                                                               
+        unit: "119",                                                                                
+        jp: "バドミントン部は放課後に体育館で練習します。",                                                               
+        en: "The badminton club practices in the ______ after school.",                       
+        answer: "gymnasium"                                                                         
+    },                                                                                              
+    {                                                                                               
+        unit: "119",                                                                                
+        jp: "オリンピックのために新しいスタジアムが建設されています。",                                                         
+        en: "A new ______ is being built for the Olympic games.",                             
+        answer: "stadium"                                                                           
+    },                                                                                              
+    {                                                                                               
+        unit: "119",                                                                                
+        jp: "どれくらいの頻度で劇場に行きますか？",                                                                   
+        en: "How often do you go to the ______?",                                             
+        answer: "theater"                                                                           
+    },                                                                                              
+    {                                                                                               
+        unit: "119",                                                                                
+        jp: "私の夢はプロの運動選手になることだ。",                                                                   
+        en: "My dream is to be a professional ______.",                                       
+        answer: "athlete"                                                                           
+    },                                                                                              
+    {                                                                                               
+        unit: "119",                                                                                
+        jp: "そのショーの最後の夜には、大勢の観客がいました。",                                                             
+        en: "There was a large ______ on the last night of the show.",                        
+        answer: "audience"                                                                          
+    },                                                                                              
+    {                                                                                               
+        unit: "120",                                                                                
+        jp: "走者たちはレース開始の合図を待った。",                                                                   
+        en: "The runners waited for the ______ to start the race.",                           
+        answer: "signal"                                                                            
+    },                                                                                              
+    {                                                                                               
+        unit: "120",                                                                                
+        jp: "美しい夕焼けは天気がよくなる兆しだ。",                                                                   
+        en: "A beautiful sunset is a ______ of good weather.",                                
+        answer: "sign"                                                                              
+    },                                                                                              
+    {                                                                                               
+        unit: "120",                                                                                
+        jp: "誰かが壁に汚れた跡をつけた。",                                                                       
+        en: "Someone left dirty ______ on the wall.",                                         
+        answer: "marks"                                                                             
+    },                                                                                              
+    {                                                                                               
+        unit: "120",                                                                                
+        jp: "整備士は車の修理のための道具を数多く必要とします。",                                                            
+        en: "Mechanics need many ______ for repairing cars.",                                 
+        answer: "tools"                                                                             
+    },                                                                                              
+    {                                                                                               
+        unit: "120",                                                                                
+        jp: "何か楽器を演奏できますか。",                                                                        
+        en: "Can you play any musical ______?",                                               
+        answer: "instruments"                                                                       
+    },                                                                                              
+    {                                                                                               
+        unit: "120",                                                                                
+        jp: "親の主な義務は、自分の子どもを守ることです。",                                                               
+        en: "A parent's main ______ is to protect their children.",                           
+        answer: "duty"                                                                              
+    },                                                                                              
+    {                                                                                               
+        unit: "120",                                                                                
+        jp: "私は18歳だから、次の選挙では投票する責任があります。",                                                          
+        en: "I'm 18, so it's my ______ to vote in the coming election.",                      
+        answer: "responsibility"                                                                    
+    },                                                                                              
+    {                                                                                               
+        unit: "120",                                                                                
+        jp: "私たちが学校に遅れたのは私の責任でした。",                                                                 
+        en: "It was my ______ that we were late for school.",                                 
+        answer: "fault"                                                                             
+    },                                                                                              
+    {                                                                                               
+        unit: "120",                                                                                
+        jp: "先生は、私たちがどれだけ忙しくても本を読むことに重点を置きます。",                                                     
+        en: "Our teacher puts ______ on reading books however busy we are.",                  
+        answer: "stress"                                                                            
+    },                                                                                              
+    {                                                                                               
+        unit: "120",                                                                                
+        jp: "英語の授業ではコミュニケーションをもっと重視すべきだ。",                                                          
+        en: "We should put more ______ on communication in English lessons.",                 
+        answer: "emphasis"                                                                          
+    },                                                                                              
+    {                                                                                               
+        unit: "120",                                                                                
+        jp: "小エビには多くのカルシウムが含まれている。",                                                                
+        en: "Shrimps ______ a lot of calcium.",                                               
+        answer: "contain"                                                                           
+    },                                                                                              
+    {                                                                                               
+        unit: "120",                                                                                
+        jp: "国連の主要な目的は、世界の平和を維持することです。",                                                            
+        en: "The main purpose of the United Nations is to ______ peace on earth.",            
+        answer: "maintain"                                                                          
+    }                                                                                               ,
     {
-        unit: "116",
-        jp: "彼らは勇敢に敵と戦った。",
-        en: "They fought bravely against the ______.",
-        answer: "enemy"
+        unit: "121",
+        jp: "車が店に突っ込み、多大な被害を与えた。",
+        en: "A car crashed into a store and ______ a lot of ______.",
+        answer: "did damage"
     },
     {
-        unit: "116",
-        jp: "指導者たちは国家間の衝突を避けるために努力しなければならない。",
-        en: "Leaders must make efforts to avoid a ______ between nations.",
-        answer: "conflict"
+        unit: "121",
+        jp: "お酒を飲みすぎるとあなたにとって害になるでしょう。",
+        en: "Drinking too much alcohol will ______ you ______.",
+        answer: "do harm"
     },
     {
-        unit: "116",
-        jp: "ナポレオンは1815年にワーテルローで敗北した。",
-        en: "Napoleon was ______ at Waterloo in 1815.",
-        answer: "defeated"
+        unit: "121",
+        jp: "私たちは昨日、好天を最大限利用してハイキングに行きました。",
+        en: "We ______ ______ ______ ______ the good weather and went hiking yesterday.",
+        answer: "made the most of"
     },
     {
-        unit: "116",
-        jp: "日本人のハワイへの移住は1860年代に始まった。",
-        en: "Japanese ______ to Hawaii began in the 1860s.",
-        answer: "immigration"
+        unit: "121",
+        jp: "彼らは強風にもかかわらず頂上に到達しようと試みた。",
+        en: "They ______ ______ ______ ______ reach the summit in spite of the strong wind.",
+        answer: "made an attempt to"
     },
     {
-        unit: "116",
-        jp: "日本の国民は多くの国で入国時にビザを必要としない。",
-        en: "Japanese ______ do not need visas to enter many countries.",
-        answer: "citizens"
+        unit: "121",
+        jp: "彼は東京では運転しないと言ったが、私には（彼の言うことが）理にかなっている。",
+        en: "He said that he doesn't drive in Tokyo. It ______ ______ to me.",
+        answer: "makes sense"
     },
     {
-        unit: "116",
-        jp: "難民たちは戦争の犠牲者である場合が多い。",
-        en: "______ are often victims of wars.",
-        answer: "Refugees"
+        unit: "121",
+        jp: "オランダ語とドイツ語にはたくさんの共通点がある。",
+        en: "The Dutch and German languages ______ ______ ______ ______ ______.",
+        answer: "have a lot in common"
     },
     {
-        unit: "116",
-        jp: "フランス革命は1789年に起こった。",
-        en: "The French ______ took place in 1789.",
-        answer: "Revolution"
+        unit: "121",
+        jp: "その男はその犯罪に何らかの関係があるようだ。",
+        en: "The man seems to ______ ______ ______ ______ ______ the crime.",
+        answer: "have something to do with"
     },
     {
-        unit: "116",
-        jp: "インドはかつてイギリスの植民地だった。",
-        en: "India used to be a British ______.",
-        answer: "colony"
+        unit: "121",
+        jp: "若いころは、あまり自分に自信がなかった。",
+        en: "When I was younger, I didn't ______ much ______ ______ myself.",
+        answer: "have confidence in"
     },
     {
-        unit: "116",
-        jp: "犯人は明日裁判所に出頭する予定だ。",
-        en: "The criminal will appear in ______ tomorrow.",
-        answer: "court"
+        unit: "121",
+        jp: "日本は世界平和を達成する上で重要な役割を果たすべきだ。",
+        en: "Japan should ______ ______ ______ ______ in achieving world peace.",
+        answer: "play an important role"
     },
     {
-        unit: "116",
-        jp: "裁判官は彼女に1,000ドルの支払いを命じた。",
-        en: "The ______ ordered her to pay 1,000 dollars.",
-        answer: "judge"
+        unit: "121",
+        jp: "先進国の人々はきれいな水（が手に入るの）を当たり前のことと思っている。",
+        en: "People in developed countries ______ clean water ______ ______.",
+        answer: "take for granted"
     },
     {
-        unit: "116",
-        jp: "その男はDVDの違法コピーを売ったことで逮捕された。",
-        en: "The man was arrested for selling ______ copies of DVDs.",
-        answer: "illegal"
+        unit: "121",
+        jp: "両親にうそをついてはいけません。",
+        en: "Don't ______ ______ ______ ______ your parents.",
+        answer: "tell a lie to"
     },
     {
-        unit: "116",
-        jp: "彼は殺人で有罪となった。",
-        en: "He was found ______ of murder.",
-        answer: "guilty"
+        unit: "121",
+        jp: "私は彼らに真実を話すべきだと思いますか。",
+        en: "Do you think I should ______ them ______ ______?",
+        answer: "tell the truth"
     },
     {
-        unit: "116",
-        jp: "証拠によって彼の無罪が証明された。",
-        en: "Because of the evidence, he was proved ______.",
-        answer: "innocent"
-    },
-
-    // Unit 117
-    {
-        unit: "117",
-        jp: "彼は明るい性格だ。",
-        en: "He has a cheerful ______.",
-        answer: "character"
+        unit: "122",
+        jp: "私はニューヨークへ2回行ったことがあります。",
+        en: "I have been to New York ______ ______ ______ times.",
+        answer: "a couple of"
     },
     {
-        unit: "117",
-        jp: "私の母は穏やかな性格だ。",
-        en: "My mother has a calm ______.",
-        answer: "personality"
+        unit: "122",
+        jp: "家に十分たくさんの食べ物があるので、買い足す必要はない。",
+        en: "There's ______ ______ food at home, so we don't have to buy more.",
+        answer: "plenty of"
     },
     {
-        unit: "117",
-        jp: "ウサギの主な特徴は、その長い耳である。",
-        en: "The main ______ of a rabbit is its long ears.",
-        answer: "characteristic"
+        unit: "122",
+        jp: "佐藤先生は今たくさんの試験用紙を採点するのに忙しい。",
+        en: "Mr. Sato is busy marking ______ ______ ______ exam papers now.",
+        answer: "a pile of"
     },
     {
-        unit: "117",
-        jp: "このカメラの特徴の1つは、その軽さだ。",
-        en: "One ______ of this camera is its light weight.",
-        answer: "feature"
+        unit: "122",
+        jp: "第一次世界大戦中に何百万人もの人々が殺された。",
+        en: "______ ______ people were killed during World War I.",
+        answer: "Millions of"
     },
     {
-        unit: "117",
-        jp: "人々が言論の自由を持たない国もある。",
-        en: "In some countries, people do not have ______ of speech.",
-        answer: "freedom"
+        unit: "122",
+        jp: "大量の食料が毎日捨てられている。",
+        en: "______ ______ food is [are] thrown away every day.",
+        answer: "Tons of"
     },
     {
-        unit: "117",
-        jp: "人々は歴史を通じて、たびたび自由のために戦ってきた。",
-        en: "People have often fought for their ______ throughout history.",
-        answer: "liberty"
+        unit: "122",
+        jp: "多数の外国人観光客が日本にやってきます。",
+        en: "______ ______ ______ ______ foreign tourists come to Japan.",
+        answer: "A large number of"
     },
     {
-        unit: "117",
-        jp: "彼女は自分が非常に困難な立場にいることに気づいた。",
-        en: "She found herself in a very difficult ______.",
-        answer: "situation"
+        unit: "122",
+        jp: "晩に大量の雨が降った。",
+        en: "______ ______ ______ ______ rain fell in the evening.",
+        answer: "A large amount of"
     },
     {
-        unit: "117",
-        jp: "私の状況が変わったならもっと旅行に出られるかもしれない。",
-        en: "If my ______ change, I may be able to travel more.",
-        answer: "circumstances"
+        unit: "122",
+        jp: "空港の近くに住む人々は騒音を我慢しなければならない。",
+        en: "People living near airports have to ______ ______ ______ the noise.",
+        answer: "put up with"
     },
     {
-        unit: "117",
-        jp: "物理学科の建物はどれですか。",
-        en: "Which building is the ______ of Physics?",
-        answer: "Department"
+        unit: "122",
+        jp: "君は歩くのがとても速い。私は君に遅れずについていけない。",
+        en: "You walk very fast. I can't ______ ______ ______ you.",
+        answer: "keep up with"
     },
     {
-        unit: "117",
-        jp: "その2国間の緊張は依然高まっている。",
-        en: "The ______ is still high between the two countries.",
-        answer: "tension"
+        unit: "122",
+        jp: "その選手はとても速く走ったので、誰も彼に追いつけなかった。",
+        en: "The winner ran so fast that no one could ______ ______ ______ him.",
+        answer: "catch up with"
     },
     {
-        unit: "117",
-        jp: "多くの映画スターは大邸宅に住んでいる。",
-        en: "Many movie stars live in ______.",
-        answer: "mansions"
-    },
-
-    // Unit 118
-    {
-        unit: "118",
-        jp: "いかなる国も核兵器を保有すべきではないという考えに賛成ですか。",
-        en: "Do you agree that no country should ______ ______ ______?",
-        answer: "possess nuclear weapons"
+        unit: "122",
+        jp: "私たちは何か学園祭のアイデアを考え出さなければならない。",
+        en: "We have to ______ ______ ______ some ideas for the school festival.",
+        answer: "come up with"
     },
     {
-        unit: "118",
-        jp: "平和を保つために軍事力は必要だろうか。",
-        en: "Do we need ______ ______ to maintain peace?",
-        answer: "military force"
+        unit: "122",
+        jp: "私はこれらの古い靴を捨てなければならない。",
+        en: "I need to ______ ______ ______ these old shoes.",
+        answer: "get rid of"
     },
     {
-        unit: "118",
-        jp: "最新の情報（時事問題）に遅れずについていくために、私は毎日新聞を読んでいます。",
-        en: "I read a newspaper every day to keep up with ______ ______.",
-        answer: "current affairs"
+        unit: "123",
+        jp: "子どものころ、私はいつも兄を尊敬していた。",
+        en: "When I was a child, I always ______ ______ ______ my brother.",
+        answer: "looked up to"
     },
     {
-        unit: "118",
-        jp: "いかなる状況においても、人種差別が許されてはならない。",
-        en: "______ ______ must not be permitted under any circumstances.",
-        answer: "Racial discrimination"
+        unit: "123",
+        jp: "私の試験の結果が悪いと、姉は私をからかった。",
+        en: "When my exam results were bad, my sister ______ ______ ______ me.",
+        answer: "made fun of"
     },
     {
-        unit: "118",
-        jp: "いじめはとても深刻な倫理的問題だ。",
-        en: "Bullying is a very serious ______ ______.",
-        answer: "moral issue"
+        unit: "123",
+        jp: "その服飾デザイナーは、多種多様な素材を利用している。",
+        en: "The clothes designer ______ ______ ______ a wide range of materials.",
+        answer: "makes use of"
     },
     {
-        unit: "118",
-        jp: "私たちはその実験をしたあとでレポートを書かなければならない。",
-        en: "We have to write a report after doing the ______.",
-        answer: "experiment"
+        unit: "123",
+        jp: "私は奈良に行った際、その機会を利用しておばを訪ねた。",
+        en: "When I went to Nara, I ______ ______ ______ the opportunity to visit my aunt.",
+        answer: "took advantage of"
     },
     {
-        unit: "118",
-        jp: "私の父は海外勤務の経験が豊富だ。",
-        en: "My father has a lot of ______ working abroad.",
-        answer: "experience"
+        unit: "123",
+        jp: "私は受けられなかった授業の埋め合わせをしなければならなかった。",
+        en: "I had to ______ ______ ______ the classes I missed.",
+        answer: "make up for"
     },
     {
-        unit: "119",
-        jp: "日本では、多くの試験でどれだけ暗記できるかが重要になる。",
-        en: "How much one can ______ is important for many exams in Japan.",
-        answer: "memorize"
+        unit: "123",
+        jp: "私は昨日会った少年と連絡を取る方法がわからない。",
+        en: "I don't know how to ______ ______ ______ ______ the boy I met yesterday.",
+        answer: "get in touch with"
     },
     {
-        unit: "119",
-        jp: "あなたより成功しているからといって、人をうらやむべきではない。",
-        en: "You shouldn't ______ people when they are more successful than you.",
-        answer: "envy"
+        unit: "123",
+        jp: "オンラインで働いていても、あなたの上司はあなたがしていることを把握できる。",
+        en: "Even if you work online, your boss can ______ ______ ______ what you are doing.",
+        answer: "keep track of"
     },
     {
-        unit: "119",
-        jp: "彼はどんな軍事行動にも反対しなければならない2つの理由に言及した。",
-        en: "He ______ two reasons why we should oppose any military action.",
-        answer: "mentioned"
+        unit: "123",
+        jp: "今年の春、私の両親はパリの町を観光するつもりです。",
+        en: "This spring, my parents are going to ______ ______ ______ ______ Paris.",
+        answer: "see the sights of"
     },
     {
-        unit: "119",
-        jp: "国連は世界平和を追求するために設立された。",
-        en: "The United Nations was established to ______ world peace.",
-        answer: "seek"
+        unit: "123",
+        jp: "日本の大学生は金銭面でよく両親に頼ります。",
+        en: "Japanese college students often ______ ______ their parents for money.",
+        answer: "depend on"
     },
     {
-        unit: "119",
-        jp: "あなたは当然レポートを書き終えたことと思います。",
-        en: "I ______ that you have finished your report.",
-        answer: "assume"
+        unit: "123",
+        jp: "近頃人々は頻繁にインターネットを頼ります。",
+        en: "Nowadays people ______ ______ the Internet very often.",
+        answer: "rely on"
     },
     {
-        unit: "119",
-        jp: "私の両親はいつも私の髪型を批判する。",
-        en: "My parents always ______ my hairstyle.",
-        answer: "criticize"
+        unit: "123",
+        jp: "アンナの助けを当てにすることはできない。",
+        en: "You can't ______ ______ Anna for help.",
+        answer: "count on"
     },
     {
-        unit: "119",
-        jp: "その生徒たちは宿題をしなかったことについて謝罪しました。",
-        en: "The students ______ for not doing their homework.",
-        answer: "apologized"
+        unit: "123",
+        jp: "亜紀とレストランに行ったとき、彼女は自分が払うと言い張った。",
+        en: "When I went to a restaurant with Aki, she ______ ______ paying.",
+        answer: "insisted on"
     },
     {
-        unit: "119",
-        jp: "入院中に友人たちが見舞いに来て私を元気づけてくれた。",
-        en: "When I was in the hospital, my friends visited me to ______ me up.",
-        answer: "cheer"
+        unit: "123",
+        jp: "英国が4つの国から成り立っていることを知っていますか。",
+        en: "Do you know that the UK ______ ______ four countries?",
+        answer: "consists of"
     },
     {
-        unit: "119",
-        jp: "バドミントン部は放課後に体育館で練習します。",
-        en: "The badminton club practices in the ______ after school.",
-        answer: "gymnasium"
+        unit: "124",
+        jp: "65歳を超える人々が日本の人口の約30%を占める。",
+        en: "People over 65 ______ ______ about 30% of the Japanese population.",
+        answer: "account for"
     },
     {
-        unit: "119",
-        jp: "オリンピックのために新しいスタジアムが建設されています。",
-        en: "A new ______ is being built for the Olympic games.",
-        answer: "stadium"
+        unit: "124",
+        jp: "人口の減少は、さまざまな問題を引き起こすだろう。",
+        en: "The decrease in population will ______ ______ various problems.",
+        answer: "bring about"
     },
     {
-        unit: "119",
-        jp: "どれくらいの頻度で劇場に行きますか？",
-        en: "How often do you go to the ______?",
-        answer: "theater"
+        unit: "124",
+        jp: "アメリカの南北戦争は1861年に勃発した。",
+        en: "The American Civil War ______ ______ in 1861.",
+        answer: "broke out"
     },
     {
-        unit: "119",
-        jp: "私の夢はプロの運動選手になることだ。",
-        en: "My dream is to be a professional ______.",
-        answer: "athlete"
+        unit: "124",
+        jp: "それぞれの空欄に1語を書き入れなさい。",
+        en: "______ ______ each blank with one word.",
+        answer: "Fill in"
     },
     {
-        unit: "119",
-        jp: "そのショーの最後の夜には、大勢の観客がいました。",
-        en: "There was a large ______ on the last night of the show.",
-        answer: "audience"
+        unit: "124",
+        jp: "あなたはニュージーランドの留学プログラムに応募しますか。",
+        en: "Are you ______ ______ the program to study in New Zealand?",
+        answer: "applying for"
     },
     {
-        unit: "120",
-        jp: "走者たちはレース開始の合図を待った。",
-        en: "The runners waited for the ______ to start the race.",
-        answer: "signal"
+        unit: "124",
+        jp: "先生は私の小論文について3つの誤りを指摘した。",
+        en: "The teacher ______ ______ three mistakes in my essay.",
+        answer: "pointed out"
     },
     {
-        unit: "120",
-        jp: "美しい夕焼けは天気がよくなる兆しだ。",
-        en: "A beautiful sunset is a ______ of good weather.",
-        answer: "sign"
+        unit: "124",
+        jp: "ガンディーはインドの独立に大いに貢献した。",
+        en: "Gandhi ______ greatly ______ India's independence.",
+        answer: "contributed to"
     },
     {
-        unit: "120",
-        jp: "誰かが壁に汚れた跡をつけた。",
-        en: "Someone left dirty ______ on the wall.",
-        answer: "marks"
+        unit: "124",
+        jp: "喫煙は肺がんになるという結果をもたらすかもしれない。",
+        en: "Smoking may ______ ______ developing lung cancer.",
+        answer: "result in"
     },
     {
-        unit: "120",
-        jp: "整備士は車の修理のための道具を数多く必要とします。",
-        en: "Mechanics need many ______ for repairing cars.",
-        answer: "tools"
+        unit: "124",
+        jp: "人は休憩を取るとより仕事に集中できる。",
+        en: "People can ______ more ______ their work after having a break.",
+        answer: "concentrate on"
     },
     {
-        unit: "120",
-        jp: "何か楽器を演奏できますか。",
-        en: "Can you play any musical ______?",
-        answer: "instruments"
+        unit: "124",
+        jp: "今日の授業では、私たちは芭蕉の句に焦点を当てます。",
+        en: "In today's lesson, we will ______ ______ the poems of Basho.",
+        answer: "focus on"
     },
     {
-        unit: "120",
-        jp: "親の主な義務は、自分の子どもを守ることです。",
-        en: "A parent's main ______ is to protect their children.",
-        answer: "duty"
+        unit: "124",
+        jp: "彼はオリンピックで新記録を出すことを目標としている。",
+        en: "He is ______ ______ making a new record at the Olympics.",
+        answer: "aiming at"
     },
     {
-        unit: "120",
-        jp: "私は18歳だから、次の選挙では投票する責任があります。",
-        en: "I'm 18, so it's my ______ to vote in the coming election.",
-        answer: "responsibility"
+        unit: "124",
+        jp: "気候変動により絶滅する動植物が増えると予想されている。",
+        en: "More animals and plants are expected to ______ ______ due to climate change.",
+        answer: "die out"
     },
     {
-        unit: "120",
-        jp: "私たちが学校に遅れたのは私の責任でした。",
-        en: "It was my ______ that we were late for school.",
-        answer: "fault"
+        unit: "125",
+        jp: "この車は時速300キロを出すことができる。",
+        en: "This car ______ ______ ______ reaching a speed of 300 km per hour.",
+        answer: "is capable of"
     },
     {
-        unit: "120",
-        jp: "先生は、私たちがどれだけ忙しくても本を読むことに重点を置きます。",
-        en: "Our teacher puts ______ on reading books however busy we are.",
-        answer: "stress"
+        unit: "125",
+        jp: "大学生はお金が不足しているという理由でアルバイトをすることが多い。",
+        en: "University students often work part-time because they ______ ______ ______ money.",
+        answer: "are short of"
     },
     {
-        unit: "120",
-        jp: "英語の授業ではコミュニケーションをもっと重視すべきだ。",
-        en: "We should put more ______ on communication in English lessons.",
-        answer: "emphasis"
+        unit: "125",
+        jp: "さくらはフィギュアスケートに熱中している。",
+        en: "Sakura ______ ______ ______ figure skating.",
+        answer: "is keen on"
     },
     {
-        unit: "120",
-        jp: "小エビには多くのカルシウムが含まれている。",
-        en: "Shrimps ______ a lot of calcium.",
-        answer: "contain"
+        unit: "125",
+        jp: "彼は経済的に両親から自立したいと思っている。",
+        en: "He wants to ______ financially ______ ______ his parents.",
+        answer: "be independent of"
     },
     {
-        unit: "120",
-        jp: "国連の主要な目的は、世界の平和を維持することです。",
-        en: "The main purpose of the United Nations is to ______ peace on earth.",
-        answer: "maintain"
+        unit: "125",
+        jp: "ある国に当てはまることが、他の国にも当てはまるとは限らない。",
+        en: "What ______ ______ ______ one country is not necessarily true of others.",
+        answer: "is true of"
+    },
+    {
+        unit: "125",
+        jp: "彼女は食べ物にうるさいので、ファストフードは食べない。",
+        en: "She ______ ______ ______ food, so she doesn't eat fast food.",
+        answer: "is particular about"
+    },
+    {
+        unit: "125",
+        jp: "人々は今や喫煙の危険性に気づいている。",
+        en: "Now people ______ ______ ______ the dangers of smoking.",
+        answer: "are aware of"
+    },
+    {
+        unit: "125",
+        jp: "このケーキには乳製品は入っていません。",
+        en: "This cake ______ ______ ______ dairy products.",
+        answer: "is free from"
+    },
+    {
+        unit: "125",
+        jp: "生きるためにお金が必要であることは言うまでもない。",
+        en: "It ______ ______ ______ that we need money to live.",
+        answer: "goes without saying"
+    },
+    {
+        unit: "125",
+        jp: "ドアの鍵を閉め忘れたことが突然私の頭に浮かんだ。",
+        en: "It suddenly ______ ______ me that I had forgotten to lock the door.",
+        answer: "occurred to"
+    },
+    {
+        unit: "125",
+        jp: "エアコンが18度に設定されている。寒かったのも当然だ。",
+        en: "The air-conditioner is set at 18 degrees. ______ ______ I felt cold.",
+        answer: "No wonder"
+    },
+    {
+        unit: "125",
+        jp: "何かを失って初めてその価値に気がつくものだ。",
+        en: "It ______ ______ ______ you lose something ______ you realize its value.",
+        answer: "is not until that"
+    },
+    {
+        unit: "125",
+        jp: "空港では風が強かった。搭乗便はキャンセルとなった。",
+        en: "It was windy at the airport. It ______ ______ ______ my flight was canceled.",
+        answer: "turned out that"
     }
-];
 
-let currentList = words.slice();
-let currentIndex = 0;
-let correct = 0;
-let answered = false;
-let wrongQuestions = [];
-let quizStarted = false;
+];                                                                                                  
 
-function startQuiz() {
-    const selectedUnits = Array.from(
-        document.querySelectorAll('input[name="unit"]:checked')
-    ).map(input => input.value);
+let currentList = words.slice();                                                                    
+let currentIndex = 0;                                                                               
+let correct = 0;                                                                                    
+let answered = false;                                                                               
+let wrongQuestions = [];                                                                            
+let quizStarted = false;                                                                            
 
-    if (selectedUnits.length === 0) {
-        document.getElementById("result").textContent = "Unitを1つ以上選択してください。";
-        return;
-    }
+function updateGroupCheckboxes() {
+    document.querySelectorAll('.unit-group').forEach(group => {
+        const boxes = Array.from(group.querySelectorAll('input[name="unit"]'));
+        const groupBox = group.querySelector('.group-checkbox');
+        const checkedCount = boxes.filter(box => box.checked).length;
 
-    currentList = words.filter(word => selectedUnits.includes(word.unit));
-
-    if (document.getElementById("order").value === "random") {
-        for (let i = currentList.length - 1; i > 0; i--) {
-            const j = Math.floor(Math.random() * (i + 1));
-            [currentList[i], currentList[j]] = [currentList[j], currentList[i]];
-        }
-    }
-
-    currentIndex = 0;
-    correct = 0;
-    answered = false;
-    wrongQuestions = [];
-    quizStarted = true;
-    document.getElementById("finishOptions").style.display = "none";
-    showQuestion();
-}
-
-function showQuestion() {
-    const q = currentList[currentIndex];
-
-    document.getElementById("japanese").textContent = q.jp;
-    document.getElementById("english").textContent = q.en;
-    document.getElementById("answer").value = "";
-    document.getElementById("answer").focus();
-    document.getElementById("result").textContent = "";
-    answered = false;
-
-    document.getElementById("score").textContent =
-        `${currentIndex + 1} / ${currentList.length}　正解：${correct}`;
-}
-
-function checkAnswer() {
-    if (answered) return;
-
-    const input = document.getElementById("answer").value.trim();
-    const answer = currentList[currentIndex].answer;
-
-    if (input === answer) {
-        document.getElementById("result").textContent = "○ 正解！";
-        correct++;
-    } else {
-        document.getElementById("result").textContent =
-            `× 不正解　答え：${answer}`;
-        if (!wrongQuestions.includes(currentList[currentIndex])) {
-            wrongQuestions.push(currentList[currentIndex]);
-        }
-    }
-
-    answered = true;
-
-    document.getElementById("score").textContent =
-        `${currentIndex + 1} / ${currentList.length}　正解：${correct}`;
-}
-
-function nextQuestion() {
-    if (currentIndex < currentList.length - 1) {
-        currentIndex++;
-        showQuestion();
-    } else {
-        document.getElementById("result").textContent =
-            `終了！ ${currentList.length}問中 ${correct}問正解`;
-        document.getElementById("finishOptions").style.display = "block";
-        document.getElementById("retryWrongButton").disabled = wrongQuestions.length === 0;
-        document.getElementById("retryWrongButton").textContent = "間違った問題を解きなおす";
-    }
-}
-
-function retryWrong() {
-    if (wrongQuestions.length === 0) return;
-    currentList = wrongQuestions.slice();
-    currentIndex = 0;
-    correct = 0;
-    answered = false;
-    wrongQuestions = [];
-    document.getElementById("finishOptions").style.display = "none";
-    showQuestion();
-}
-
-
-document.getElementById("answer").addEventListener("keydown", function(event) {
-    if (event.key === "Enter") {
-        if (!answered) {
-            checkAnswer();
+        if (checkedCount === 0) {
+            groupBox.checked = false;
+            groupBox.indeterminate = false;
+        } else if (checkedCount === boxes.length) {
+            groupBox.checked = true;
+            groupBox.indeterminate = false;
         } else {
-            nextQuestion();
+            groupBox.checked = false;
+            groupBox.indeterminate = true;
         }
-    }
+    });
+}
+
+// グループのチェックを変更したら、そのグループ内の5つを一括でON/OFF
+// changeイベントを使うことで、チェックボックスを実際に変更したときだけ処理する。
+document.querySelectorAll('.group-checkbox').forEach(groupBox => {
+    groupBox.addEventListener('change', function(event) {
+        event.stopPropagation();
+        const group = this.closest('.unit-group');
+        group.querySelectorAll('input[name="unit"]').forEach(box => {
+            box.checked = this.checked;
+        });
+        this.indeterminate = false;
+    });
 });
 
-showQuestion();
-</script>
-</body>
-</html>
+// 個別Unitを変更したら、親のグループチェックも自動更新
+// 全部ON → 親もON / 全部OFF → 親もOFF / 一部だけ → 親は「－」表示
+
+document.querySelectorAll('input[name="unit"]').forEach(box => {
+    box.addEventListener('change', updateGroupCheckboxes);
+});
+
+updateGroupCheckboxes();
+
+function startQuiz() {                                                                              
+    const selectedUnits = Array.from(                                                               
+        document.querySelectorAll('input[name="unit"]:checked')                                    
+    ).map(input => input.value);                                                                    
+
+    if (selectedUnits.length === 0) {                                                               
+        document.getElementById("result").textContent = "Unitを1つ以上選択してください。";                       
+        return;                                                                                     
+    }                                                                                               
+
+    currentList = words.filter(word => selectedUnits.includes(word.unit));                          
+
+    if (document.getElementById("order").value === "random") {                                      
+        for (let i = currentList.length - 1; i > 0; i--) {                                          
+            const j = Math.floor(Math.random() * (i + 1));                                         
+            [currentList[i], currentList[j]] = [currentList[j], currentList[i]];                    
+        }                                                                                           
+    }                                                                                               
+
+    currentIndex = 0;                                                                               
+    correct = 0;                                                                                    
+    answered = false;                                                                               
+    wrongQuestions = [];                                                                            
+    quizStarted = true;                                                                             
+    document.getElementById("finishOptions").style.display = "none";                                
+    showQuestion();                                                                                 
+}                                                                                                   
+
+function showQuestion() {                                                                           
+    const q = currentList[currentIndex];                                                            
+
+    document.getElementById("japanese").textContent = q.jp;                                         
+    document.getElementById("english").textContent = q.en;                                          
+    document.getElementById("answer").value = "";                                                   
+    document.getElementById("answer").focus();                                                      
+    document.getElementById("result").textContent = "";                                             
+    answered = false;                                                                               
+
+    document.getElementById("score").textContent =                                                  
+        `${currentIndex + 1} / ${currentList.length}　正解：${correct}`;                              
+}                                                                                                   
+
+function checkAnswer() {                                                                            
+    if (answered) return;                                                                           
+
+    const input = document.getElementById("answer").value.trim().replace(/\s*\/\s*/g, " ").replace(/\s+/g, " ");                                   
+    const answer = currentList[currentIndex].answer.trim().replace(/\s*\/\s*/g, " ").replace(/\s+/g, " ");                                                
+
+    if (input === answer) {                                                                         
+        document.getElementById("result").textContent = "○ 正解！";                                    
+        correct++;                                                                                  
+    } else {                                                                                        
+        document.getElementById("result").textContent =                                             
+            `× 不正解　答え：${answer}`;                                                                 
+        if (!wrongQuestions.includes(currentList[currentIndex])) {                                  
+            wrongQuestions.push(currentList[currentIndex]);                                         
+        }                                                                                           
+    }                                                                                               
+
+    answered = true;                                                                                
+
+    document.getElementById("score").textContent =                                                  
+        `${currentIndex + 1} / ${currentList.length}　正解：${correct}`;                              
+}                                                                                                   
+
+function nextQuestion() {                                                                           
+    if (currentIndex < currentList.length - 1) {                                                    
+        currentIndex++;                                                                             
+        showQuestion();                                                                             
+    } else {                                                                                        
+        document.getElementById("result").textContent =                                             
+            `終了！ ${currentList.length}問中 ${correct}問正解`;                                          
+        document.getElementById("finishOptions").style.display = "block";                           
+        document.getElementById("retryWrongButton").disabled = wrongQuestions.length === 0;         
+        document.getElementById("retryWrongButton").textContent = "間違った問題を解きなおす";                   
+    }                                                                                               
+}                                                                                                   
+
+function retryWrong() {                                                                             
+    if (wrongQuestions.length === 0) return;                                                        
+    currentList = wrongQuestions.slice();                                                           
+    currentIndex = 0;                                                                               
+    correct = 0;                                                                                    
+    answered = false;                                                                               
+    wrongQuestions = [];                                                                            
+    document.getElementById("finishOptions").style.display = "none";                                
+    showQuestion();                                                                                 
+}                                                                                                   
+
+
+document.getElementById("answer").addEventListener("keydown", function(event) {                     
+    if (event.key === "Enter") {                                                                    
+        if (!answered) {                                                                            
+            checkAnswer();                                                                          
+        } else {                                                                                    
+            nextQuestion();                                                                         
+        }                                                                                           
+    }                                                                                               
+});                                                                                                 
+
+showQuestion();                                                                                     
+</script>                                                                                          
+</body>                                                                                            
+</html>                                                                                            

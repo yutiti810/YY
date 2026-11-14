@@ -87,6 +87,18 @@
     .setting-title {                                                                                
         font-weight: bold;                                                                          
         margin-bottom: 12px;                                                                        
+        display: flex;                                                                              
+        justify-content: space-between;                                                             
+        align-items: center;                                                                        
+        flex-wrap: wrap;                                                                            
+        gap: 8px;                                                                                   
+    }                                                                                               
+    .unit-controls button {                                                                         
+        font-size: 13px;                                                                            
+        padding: 4px 10px;                                                                          
+        margin: 0 0 0 5px;                                                                          
+        background: #555;                                                                           
+        color: white;                                                                               
     }                                                                                               
     .unit-options {                                                                                 
         display: flex;                                                                              
@@ -183,7 +195,13 @@
         例文の日本語を読んで、空欄に入る英単語・連語を入力してください。複数語の連語はスペースまたは「/」で区切って入力できます。                                                                
     </div>                                                                                         
     <div class="settings">                                                                         
-        <div class="setting-title">出題するUnit（複数選択可）</div>
+        <div class="setting-title">
+            <span>出題するUnit（複数選択可）</span>
+            <div class="unit-controls">
+                <button type="button" onclick="setAllUnits(true)">すべてつける</button>
+                <button type="button" onclick="setAllUnits(false)">すべて外す</button>
+            </div>
+        </div>
         <!-- ここに5UnitごとのグループがJavaScriptで自動生成されます -->
         <div id="unitGroupsContainer" class="unit-groups"></div>
 
@@ -541,7 +559,7 @@ const words = [
     { unit: "140", jp: "好きなことは何でもできます。", en: "You can do ______ you like today.", answer: "whatever" },
     { unit: "140", jp: "パリに行くときはいつでも、ルーヴル美術館に行きます。", en: "______ I go to Paris, I go to the Louvre Museum.", answer: "Whenever" },
 
-　　// Unit 141
+  // Unit 141
     {unit: "141", jp: "この会社の製品は主に中国で製造されています。", en: "The company's products are mainly ______ in China.", answer: "manufactured" },
     {unit: "141", jp: "日本のいたるところでコンクリートのビルが建設されてきた。", en: "Concrete buildings have been ______ all over Japan.", answer: "constructed" },
     {unit: "141", jp: "企業はさまざまなやり方で製品を宣伝することができる。", en: "Companies can ______ their products in a variety of ways.", answer: "advertise" },
@@ -630,19 +648,17 @@ function renderUnitGroups() {
     const minUnit = uniqueUnits[0];
     const maxUnit = uniqueUnits[uniqueUnits.length - 1];
 
-    // グループの境界を決定（例：116スタートなら 116〜120、121〜125...）
     let currentGroupStart = minUnit;
 
     while (currentGroupStart <= maxUnit) {
         let currentGroupEnd = currentGroupStart + 4;
         
-        // このグループ範囲に含まれるUnitが存在するか確認
         const unitsInGroup = uniqueUnits.filter(u => u >= currentGroupStart && u <= currentGroupEnd);
 
         if (unitsInGroup.length > 0) {
             const details = document.createElement("details");
             details.className = "unit-group";
-            details.open = true;
+            details.open = false; // ★ 最初は閉じた状態にする
 
             const groupTitle = `Unit ${currentGroupStart}〜${currentGroupEnd}`;
 
@@ -680,6 +696,14 @@ function renderUnitGroups() {
         box.addEventListener('change', updateGroupCheckboxes);
     });
 
+    updateGroupCheckboxes();
+}
+
+// ★ すべてつける・すべて外す機能の関数
+function setAllUnits(checkStatus) {
+    document.querySelectorAll('#unitGroupsContainer input[type="checkbox"]').forEach(box => {
+        box.checked = checkStatus;
+    });
     updateGroupCheckboxes();
 }
 
@@ -806,4 +830,4 @@ showQuestion();
 </script>                                                                                          
 </body>                                                                                            
 </html>
-
+```[cite: 1]

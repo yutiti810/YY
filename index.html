@@ -998,20 +998,17 @@ function loadAdminDashboard() {
             }
 
             let html = "<table style='width:100%; border-collapse:collapse;'>";
-            html += "<tr style='background:#eee; text-align:left;'><th style='padding:6px;'>種類</th><th style='padding:6px;'>内容</th><th style='padding:6px;'>状態</th><th style='padding:6px;'>操作</th></tr>";
+            // 変えた後：状態列を削除し、未処理だけが表示されるようにすっきりさせた
+            html += "<tr style='background:#eee; text-align:left;'><th style='padding:6px;'>種類</th><th style='padding:6px;'>内容</th><th style='padding:6px;'>操作</th></tr>";
             
             data.forEach(r => {
                 const typeLabel = r.type === 'word_error' ? '問題間違い' : '一般要望';
-                const statusLabel = r.status === 'resolved' ? '✅ 修正済み' : '⏳ 未処理';
                 html += `<tr style='border-bottom:1px solid #ddd;'>
                     <td style='padding:6px;'>${typeLabel}</td>
                     <td style='padding:6px; word-break:break-all;'>${r.content}</td>
-                    <td style='padding:6px;'>${statusLabel}</td>
-                    <td style='padding:6px;'>`;
-                if (r.status !== 'resolved') {
-                    html += `<button type='button' onclick='resolveReport("${r.id}")' style='background:#2e6b45; color:white; font-size:12px; padding:4px 8px; margin:0;'>修正しました</button>`;
-                }
-                html += `</td></tr>`;
+                    <td style='padding:6px;'>
+                        <button type='button' onclick='resolveReport("${r.id}")' style='background:#2e6b45; color:white; font-size:12px; padding:4px 8px; margin:0;'>修正しました</button>
+                    </td></tr>`;
             });
             html += "</table>";
             listDiv.innerHTML = html;

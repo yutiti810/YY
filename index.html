@@ -911,7 +911,7 @@ function submitWordError() {
         .then(res => res.json())
         .then(data => {
             if (data.success) {
-                alert("間違い報告を送信しました。LINEへも通知されました。");
+                alert("間違い報告を送信しました。");
                 closeReportModal();
                 fetchReportsAndSync();
             } else {

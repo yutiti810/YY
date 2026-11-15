@@ -37,11 +37,7 @@
         line-height: 1.7;                                                                           
         margin-bottom: 25px;                                                                        
     }                                                                                               
-    .blank {                                                                                        
-        color: navy;                                                                                
-        letter-spacing: 3px;                                                                        
-    }                                                                                               
-    input {                                                                                         
+    input[type="text"] {                                                                            
         width: 90%;                                                                                 
         max-width: 600px;                                                                           
         font-size: 22px;                                                                            
@@ -116,49 +112,42 @@
         max-width: none;                                                                            
         margin: 0;                                                                                  
     }                                                                                               
-    .unit-groups {
-        display: grid;
-        gap: 12px;
-        margin-bottom: 16px;
-    }
-
-    .unit-group {
-        border: 1px solid #d5dbe2;
-        border-radius: 10px;
-        background: white;
-        overflow: hidden;
-    }
-
-    .unit-group > summary {
-        padding: 12px 14px;
-        cursor: pointer;
-        font-weight: bold;
-        background: #eef2f6;
-        list-style-position: inside;
-    }
-
-    .unit-group[open] > summary {
-        border-bottom: 1px solid #d5dbe2;
-    }
-
-    .group-label {
-        display: inline-flex;
-        align-items: center;
-        gap: 7px;
-        cursor: pointer;
-    }
-
-    .group-label input {
-        width: auto;
-        max-width: none;
-        margin: 0;
-    }
-
-    .unit-group .unit-options {
-        padding: 14px;
-        margin-bottom: 0;
-    }
-
+    .unit-groups {                                                                                  
+        display: grid;                                                                              
+        gap: 12px;                                                                                  
+        margin-bottom: 16px;                                                                        
+    }                                                                                               
+    .unit-group {                                                                                   
+        border: 1px solid #d5dbe2;                                                                  
+        border-radius: 10px;                                                                        
+        background: white;                                                                          
+        overflow: hidden;                                                                           
+    }                                                                                               
+    .unit-group > summary {                                                                         
+        padding: 12px 14px;                                                                         
+        cursor: pointer;                                                                            
+        font-weight: bold;                                                                          
+        background: #eef2f6;                                                                        
+        list-style-position: inside;                                                                
+    }                                                                                               
+    .unit-group[open] > summary {                                                                   
+        border-bottom: 1px solid #d5dbe2;                                                           
+    }                                                                                               
+    .group-label {                                                                                  
+        display: inline-flex;                                                                       
+        align-items: center;                                                                        
+        gap: 7px;                                                                                   
+        cursor: pointer;                                                                            
+    }                                                                                               
+    .group-label input {                                                                            
+        width: auto;                                                                                
+        max-width: none;                                                                            
+        margin: 0;                                                                                  
+    }                                                                                               
+    .unit-group .unit-options {                                                                     
+        padding: 14px;                                                                              
+        margin-bottom: 0;                                                                           
+    }                                                                                               
     .setting-row {                                                                                  
         display: flex;                                                                              
         flex-wrap: wrap;                                                                            
@@ -170,22 +159,35 @@
         background: #2e6b45;                                                                        
         color: white;                                                                               
     }                                                                                               
-
-    @media screen and (min-width: 900px) {
-        .quiz {
-            max-width: 980px;
-        }
-        .japanese {
-            font-size: 23px;
-        }
-        .english {
-            font-size: 30px;
-            line-height: 1.75;
-        }
-        input {
-            font-size: 24px;
-        }
-    }
+    /* 追加機能のスタイル */                                                                          
+    .extra-section {                                                                                
+        margin-top: 30px;                                                                           
+        padding: 15px;                                                                              
+        background: #fff;                                                                           
+        border: 1px solid #ddd;                                                                     
+        border-radius: 10px;                                                                        
+    }                                                                                               
+    .modal {                                                                                        
+        display: none;                                                                              
+        position: fixed;                                                                            
+        top: 0; left: 0; width: 100%; height: 100%;                                                 
+        background: rgba(0,0,0,0.5);                                                                
+        justify-content: center; align-items: center;                                               
+        z-index: 1000;                                                                              
+    }                                                                                               
+    .modal-content {                                                                                
+        background: white;                                                                          
+        padding: 25px;                                                                              
+        border-radius: 10px;                                                                        
+        width: 90%; max-width: 500px;                                                               
+        max-height: 80vh; overflow-y: auto;                                                         
+    }                                                                                               
+    @media screen and (min-width: 900px) {                                                          
+        .quiz { max-width: 980px; }                                                                 
+        .japanese { font-size: 23px; }                                                              
+        .english { font-size: 30px; line-height: 1.75; }                                              
+        input[type="text"] { font-size: 24px; }                                                     
+    }                                                                                               
 </style>                                                                                           
 </head>                                                                                            
 <body>                                                                                             
@@ -195,15 +197,14 @@
         例文の日本語を読んで、空欄に入る英単語・連語を入力してください。複数語の連語はスペースまたは「/」で区切って入力できます。                                                                
     </div>                                                                                         
     <div class="settings">                                                                         
-        <div class="setting-title">
-            <span>出題するUnit（複数選択可）</span>
-            <div class="unit-controls">
-                <button type="button" onclick="setAllUnits(true)">すべてつける</button>
-                <button type="button" onclick="setAllUnits(false)">すべて外す</button>
-            </div>
-        </div>
-        <!-- ここに5UnitごとのグループがJavaScriptで自動生成されます -->
-        <div id="unitGroupsContainer" class="unit-groups"></div>
+        <div class="setting-title">                                                                 
+            <span>出題するUnit（複数選択可）</span>                                                    
+            <div class="unit-controls">                                                             
+                <button type="button" onclick="setAllUnits(true)">すべてつける</button>                
+                <button type="button" onclick="setAllUnits(false)">すべて外す</button>               
+            </div>                                                                                  
+        </div>                                                                                     
+        <div id="unitGroupsContainer" class="unit-groups"></div>                                    
 
         <div class="setting-row">                                                                  
             <label for="order">出題順：</label>                                                       
@@ -214,19 +215,74 @@
             <button id="startButton" onclick="startQuiz()">開始</button>                            
         </div>                                                                                     
     </div>                                                                                         
+
     <div id="japanese" class="japanese"></div>                                                    
     <div id="english" class="english"></div>                                                      
     <input id="answer" type="text" autocomplete="off" placeholder="英単語を入力">                        
     <br>                                                                                           
     <button id="answerButton" onclick="checkAnswer()">答える</button>                                
     <button id="nextButton" onclick="nextQuestion()">次の問題</button>                                
+    
+    <!-- 問題ごとの間違い報告ボタン & サイン -->
+    <div style="margin-top: 15px; display: flex; align-items: center; gap: 10px; flex-wrap: wrap;">
+        <button type="button" onclick="openReportModal()" style="background: #a94442; color: white; font-size: 14px; padding: 6px 12px; margin:0;">この問題の間違いを報告</button>
+        <span id="questionErrorSign" style="color: #a94442; font-weight: bold; display: none; font-size: 14px;">⚠️ この問題には間違い報告が出ています</span>
+    </div>
+
     <div id="result"></div>                                                                       
     <div id="score" class="score"></div>                                                          
-    <div id="finishOptions" style="display:none;">                                                                       
+    <div id="finishOptions" style="display:none; margin-top: 15px;">                                                                       
         <button id="retryWrongButton" class="primary" onclick="retryWrong()">間違った問題を解きなおす</button>
     </div>                                                                                         
-</div>                                                                                             
-<script>                                                                                           
+
+    <!-- 全体要望・LINE連携・管理者入口エリア -->
+    <div class="extra-section">
+        <h3 style="margin-top:0; color:#333; font-size:16px;">ご意見・ご要望 / サポート</h3>
+        <textarea id="generalRequestText" placeholder="全体への要望やバグ報告をここに入力..." style="width:100%; height:60px; font-size:14px; padding:8px; border:1px solid #ccc; border-radius:6px; box-sizing:border-box;"></textarea>
+        <button type="button" onclick="submitGeneralRequest()" style="background:#337ab7; color:white; font-size:14px; padding:6px 16px; margin-top:8px;">要望を送信する</button>
+        
+        <div style="margin-top: 15px;">
+            <!-- ★ここにあなたのLINE公式アカウントの友だち追加リンクを入れてください -->
+            <a href="YOUR_LINE_ADD_FRIEND_URL_HERE" target="_blank" style="display:inline-block; background:#06C755; color:white; font-weight:bold; padding:8px 16px; border-radius:6px; text-decoration:none; font-size:14px;">
+                LINE公式アカウント 友だち追加
+            </a>
+        </div>
+    </div>
+</div>
+
+<!-- 管理者用ログインモーダル（「26136」入力用） -->
+<div id="adminModal" class="modal">
+    <div class="modal-content">
+        <h3 style="margin-top:0;">管理者専用ページ</h3>
+        <p style="font-size: 14px; color: #666;">送信された間違い報告や要望の一覧です。「修正済み」を押すと報告サインが消えます。</p>
+        <div id="adminReportList" style="margin-bottom: 15px; font-size: 14px; max-height: 300px; overflow-y: auto;">読み込み中...</div>
+        <button type="button" onclick="closeAdminModal()" style="background:#666; color:white; font-size:14px; padding:6px 14px;">閉じる</button>
+    </div>
+</div>
+
+<!-- 問題間違い報告用モーダル -->
+<div id="reportModal" class="modal">
+    <div class="modal-content">
+        <h3 style="margin-top:0;">問題の間違い報告</h3>
+        <p id="reportTargetInfo" style="font-size: 14px; color: #666;"></p>
+        <textarea id="reportDetailText" placeholder="間違いの詳細（例：答えのスペルが違う、日本語訳がおかしい等）を入力..." style="width:100%; height:80px; font-size:14px; padding:8px; border:1px solid #ccc; border-radius:6px; box-sizing:border-box;"></textarea>
+        <div style="margin-top: 10px; text-align: right;">
+            <button type="button" onclick="closeReportModal()" style="background:#666; color:white; font-size:14px; padding:6px 14px;">キャンセル</button>
+            <button type="button" onclick="submitWordError()" style="background:#a94442; color:white; font-size:14px; padding:6px 14px;">送信する</button>
+        </div>
+    </div>
+</div>
+
+<script>
+// ==========================================
+// ★重要: ここにご自身のGASのウェブアプリURLを設定してください
+// ==========================================
+const GAS_URL = "https://script.google.com/macros/s/AKfycbynPmP4T2UuUQ4Rq6V6zqZWrsCiGpdJjlxPIIbvlSZVdEBstyY3tMHWa16gaEJNckeAdQ/exec";
+
+// 全体のレポート・報告リスト（キャッシュ用）
+let globalReports = [];
+
+// 単語データ（そのまま保持）
 const words = [                                                                                     
     // Unit 116
     { unit: "116", jp: "彼らは勇敢に敵と戦った。", en: "They fought bravely against the ______.", answer: "enemy" },
@@ -366,7 +422,7 @@ const words = [
     { unit: "125", jp: "何かを失って初めてその価値に気がつくものだ。", en: "It ______ ______ ______ you lose something ______ you realize its value.", answer: "is not until that" },
     { unit: "125", jp: "空港では風が強かった。結局私の便はキャンセルとなった。", en: "It was windy at the airport. It ______ ______ ______ my flight was canceled.", answer: "turned out that" },
 
-// Unit 126
+    // Unit 126
     { unit: "126", jp: "その船は水平線の向こうに消えた。", en: "The ship disappeared beyond the ______.", answer: "horizon" },
     { unit: "126", jp: "化石燃料を燃やすと、地球の大気を汚染する。", en: "Burning fossil fuels pollutes the earth's ______.", answer: "atmosphere" },
     { unit: "126", jp: "プラスチックが海洋生物にとって有害であることは明白だ。", en: "It is clear that plastic is harmful to ______ life.", answer: "marine" },
@@ -386,11 +442,11 @@ const words = [
     { unit: "127", jp: "ホッキョクグマやコアラのような動物は、絶滅危惧種です。", en: "Animals such as polar bears and koalas are ______ ______.", answer: "endangered species" },
     { unit: "127", jp: "進化論は今では広く受け入れられている。", en: "The ______ of ______ is now widely accepted.", answer: "theory evolution" },
     { unit: "127", jp: "恐竜は約6600万年前に絶滅したと言われている。", en: "It is said that ______ became ______ about 66 million years ago.", answer: "dinosaurs extinct" },
-    { unit: "127", jp: "多くの工場が二酸化炭素を放出し、それが地球温暖化の主な原因となっている。。", en: "Many factories ______ ______ dioxide, which is a main cause of global warming.", answer: "release carbon" },
+    { unit: "127", jp: "多くの工場が二酸化炭素を放出し、それが地球温暖化の主な原因となっている。", en: "Many factories ______ ______ dioxide, which is a main cause of global warming.", answer: "release carbon" },
 
     // Unit 128
     { unit: "128", jp: "世界中にはハートの形をした島がいくつかあります。", en: "Several islands around the world are in the ______ of a heart.", answer: "shape" },
-    { unit: "128", jp: "鶴を折るためには、正方形の紙を枚1使います。", en: "To make a crane, we use a ______ sheet of paper.", answer: "square" },
+    { unit: "128", jp: "鶴を折るためには、正方形の紙を1枚使います。", en: "To make a crane, we use a ______ sheet of paper.", answer: "square" },
     { unit: "128", jp: "紙の中央に円を描いてください。", en: "Draw a ______ in the middle of the paper.", answer: "circle" },
     { unit: "128", jp: "正三角形の3つの辺はすべて同じ長さです。", en: "The three sides of a regular ______ are all the same length.", answer: "triangle" },
     { unit: "128", jp: "このニンジンを立方体に切ってください。", en: "Please cut this carrot into ______.", answer: "cubes" },
@@ -559,74 +615,74 @@ const words = [
     { unit: "140", jp: "好きなことは何でもできます。", en: "You can do ______ you like today.", answer: "whatever" },
     { unit: "140", jp: "パリに行くときはいつでも、ルーヴル美術館に行きます。", en: "______ I go to Paris, I go to the Louvre Museum.", answer: "Whenever" },
 
-  // Unit 141
-    {unit: "141", jp: "この会社の製品は主に中国で製造されています。", en: "The company's products are mainly ______ in China.", answer: "manufactured" },
-    {unit: "141", jp: "日本のいたるところでコンクリートのビルが建設されてきた。", en: "Concrete buildings have been ______ all over Japan.", answer: "constructed" },
-    {unit: "141", jp: "企業はさまざまなやり方で製品を宣伝することができる。", en: "Companies can ______ their products in a variety of ways.", answer: "advertise" },
-    {unit: "141", jp: "政府は再生可能エネルギーの利用を促進しようとしている。", en: "The government is trying to ______ the use of renewable energy.", answer: "promote" },
-    {unit: "141", jp: "電気自動車の需要が増えている。", en: "The ______ for electric cars is increasing.", answer: "demand" },
-    {unit: "141", jp: "異常気象のために、野菜の供給が不足している。", en: "Vegetables are in short ______ now because of the unusual weather.", answer: "supply" },
-    {unit: "141", jp: "高収入を得ている人たちは、より多く税金を支払っている。", en: "People who earn a high ______ pay more tax.", answer: "income" },
-    {unit: "141", jp: "戦時には難民のための基金を設立すべきだ。", en: "We should set up a ______ for refugees at the time of war.", answer: "fund" },
-    {unit: "141", jp: "20代で家を購入する人もいる。", en: "Some people ______ their house in their twenties.", answer: "purchase" },
-    {unit: "141", jp: "私たちは今消費者社会に生きている。", en: "We now live in a ______ society.", answer: "consumer" },
-    {unit: "141", jp: "そのイタリアンレストランはピザを配達していますか。", en: "Does the Italian restaurant ______ pizza?", answer: "deliver" },
-    {unit: "141", jp: "この棚にあるすべての品物は3割引となっています。", en: "All ______ on this shelf are 30% off.", answer: "items" },
-    {unit: "141", jp: "銀行口座を開設するためには、身分証明書の提示が必要です。", en: "You must show your identity card to open a bank ______.", answer: "account" },
+    // Unit 141
+    { unit: "141", jp: "この会社の製品は主に中国で製造されています。", en: "The company's products are mainly ______ in China.", answer: "manufactured" },
+    { unit: "141", jp: "日本のいたるところでコンクリートのビルが建設されてきた。", en: "Concrete buildings have been ______ all over Japan.", answer: "constructed" },
+    { unit: "141", jp: "企業はさまざまなやり方で製品を宣伝することができる。", en: "Companies can ______ their products in a variety of ways.", answer: "advertise" },
+    { unit: "141", jp: "政府は再生可能エネルギーの利用を促進しようとしている。", en: "The government is trying to ______ the use of renewable energy.", answer: "promote" },
+    { unit: "141", jp: "電気自動車の需要が増えている。", en: "The ______ for electric cars is increasing.", answer: "demand" },
+    { unit: "141", jp: "異常気象のために、野菜の供給が不足している。", en: "Vegetables are in short ______ now because of the unusual weather.", answer: "supply" },
+    { unit: "141", jp: "高収入を得ている人たちは、より多く税金を支払っている。", en: "People who earn a high ______ pay more tax.", answer: "income" },
+    { unit: "141", jp: "戦時には難民のための基金を設立すべきだ。", en: "We should set up a ______ for refugees at the time of war.", answer: "fund" },
+    { unit: "141", jp: "20代で家を購入する人もいる。", en: "Some people ______ their house in their twenties.", answer: "purchase" },
+    { unit: "141", jp: "私たちは今消費者社会に生きている。", en: "We now live in a ______ society.", answer: "consumer" },
+    { unit: "141", jp: "そのイタリアンレストランはピザを配達していますか。", en: "Does the Italian restaurant ______ pizza?", answer: "deliver" },
+    { unit: "141", jp: "この棚にあるすべての品物は3割引となっています。", en: "All ______ on this shelf are 30% off.", answer: "items" },
+    { unit: "141", jp: "銀行口座を開設するためには、身分証明書の提示が必要です。", en: "You must show your identity card to open a bank ______.", answer: "account" },
 
     // Unit 142
-    {unit: "142", jp: "まず、昨日の授業を復習します。", en: "First, we will ______ yesterday's lesson.", answer: "review" },
-    {unit: "142", jp: "月が湖に映っていた。", en: "The moon was ______ in the lake.", answer: "reflected" },
-    {unit: "142", jp: "18歳以上の人を成人とするために、政府は法律を改正した。", en: "The government ______ the law to make people aged 18 and above adults.", answer: "revised" },
-    {unit: "142", jp: "彼には会ったことがあるが、名前が思い出せない。", en: "I've met him before, but I can't ______ his name.", answer: "recall" },
-    {unit: "142", jp: "9月までにパスポートを更新しなければならない。", en: "I need to ______ my passport by September.", answer: "renew" },
-    {unit: "142", jp: "姉は私よりわずかに背が高い。", en: "My sister is ______ taller than me.", answer: "slightly" },
-    {unit: "142", jp: "日本人にとって韓国語は学ぶのが比較的簡単だと言われています。", en: "It is said that Korean is ______ easy for Japanese people to learn.", answer: "relatively" },
-    {unit: "142", jp: "私はアイスクリームが好きだ、特にメロン味が。", en: "I love ice cream, ______ melon flavor.", answer: "especially" },
-    {unit: "142", jp: "英単語の中にはきわめてつづりが難しいものもある。", en: "Some English words are ______ difficult to spell.", answer: "extremely" },
-    {unit: "142", jp: "その映画はまさしく原作小説と同じようだ。", en: "The film was ______ like the original novel.", answer: "exactly" },
-    {unit: "142", jp: "セーラは間違いなく学校で一番の泳ぎ手だ。", en: "Sarah is ______ the best swimmer in our school.", answer: "definitely" },
+    { unit: "142", jp: "まず、昨日の授業を復習します。", en: "First, we will ______ yesterday's lesson.", answer: "review" },
+    { unit: "142", jp: "月が湖に映っていた。", en: "The moon was ______ in the lake.", answer: "reflected" },
+    { unit: "142", jp: "18歳以上の人を成人とするために、政府は法律を改正した。", en: "The government ______ the law to make people aged 18 and above adults.", answer: "revised" },
+    { unit: "142", jp: "彼には会ったことがあるが、名前が思い出せない。", en: "I've met him before, but I can't ______ his name.", answer: "recall" },
+    { unit: "142", jp: "9月までにパスポートを更新しなければならない。", en: "I need to ______ my passport by September.", answer: "renew" },
+    { unit: "142", jp: "姉は私よりわずかに背が高い。", en: "My sister is ______ taller than me.", answer: "slightly" },
+    { unit: "142", jp: "日本人にとって韓国語は学ぶのが比較的簡単だと言われています。", en: "It is said that Korean is ______ easy for Japanese people to learn.", answer: "relatively" },
+    { unit: "142", jp: "私はアイスクリームが好きだ、特にメロン味が。", en: "I love ice cream, ______ melon flavor.", answer: "especially" },
+    { unit: "142", jp: "英単語の中にはきわめてつづりが難しいものもある。", en: "Some English words are ______ difficult to spell.", answer: "extremely" },
+    { unit: "142", jp: "その映画はまさしく原作小説と同じようだ。", en: "The film was ______ like the original novel.", answer: "exactly" },
+    { unit: "142", jp: "セーラは間違いなく学校で一番の泳ぎ手だ。", en: "Sarah is ______ the best swimmer in our school.", answer: "definitely" },
 
     // Unit 143
-    {unit: "143", jp: "ヨーロッパの国から来た人々が19世紀にアフリカを探検した。", en: "People from European countries ______ Africa in the 19th century.", answer: "explored" },
-    {unit: "143", jp: "ウクライナ人の友人は、彼女の家の近くで爆弾が爆発したと言った。", en: "My Ukrainian friend said that a bomb ______ near her house.", answer: "exploded" },
-    {unit: "143", jp: "宇宙が今でも広がっているというのは本当ですか。", en: "Is it true that the universe is still ______?", answer: "expanding" },
-    {unit: "143", jp: "日本における高齢者の数は3600万人を超えた。", en: "The number of elderly people in Japan has ______ 36 million.", answer: "exceeded" },
-    {unit: "143", jp: "車の発明は、人がずっと楽に旅行することを可能にした。", en: "The invention of cars has ______ people to travel much more easily.", answer: "enabled" },
-    {unit: "143", jp: "どの会社も、男女間の賃金の平等を保証すべきだ。", en: "Every company should ______ equality in wages for both men and women.", answer: "ensure" },
-    {unit: "143", jp: "私の両親は兄に海外で学ぶよう勧めている。", en: "My parents are ______ my brother to study abroad.", answer: "encouraging" },
-    {unit: "143", jp: "安全のため、車内では全員シートベルトを締めなければなりません。", en: "Everyone must ______ their seat belts in a car for safety.", answer: "fasten" },
-    {unit: "143", jp: "他国を訪れることは、私たちの視野を広げてくれる。", en: "Visiting other countries can ______ our minds.", answer: "broaden" },
-    {unit: "143", jp: "日本の経済力は弱まりつつあるとしばしば言われる。", en: "It is often said that Japan's economic power is ______.", answer: "weakening" },
-    {unit: "143", jp: "明日、すべての授業は45分に短縮されます。", en: "Tomorrow, every lesson will be ______ to 45 minutes.", answer: "shortened" },
+    { unit: "143", jp: "ヨーロッパの国から来た人々が19世紀にアフリカを探検した。", en: "People from European countries ______ Africa in the 19th century.", answer: "explored" },
+    { unit: "143", jp: "ウクライナ人の友人は、彼女の家の近くで爆弾が爆発したと言った。", en: "My Ukrainian friend said that a bomb ______ near her house.", answer: "exploded" },
+    { unit: "143", jp: "宇宙が今でも広がっているというのは本当ですか。", en: "Is it true that the universe is still ______?", answer: "expanding" },
+    { unit: "143", jp: "日本における高齢者の数は3600万人を超えた。", en: "The number of elderly people in Japan has ______ 36 million.", answer: "exceeded" },
+    { unit: "143", jp: "車の発明は、人がずっと楽に旅行することを可能にした。", en: "The invention of cars has ______ people to travel much more easily.", answer: "enabled" },
+    { unit: "143", jp: "どの会社も、男女間の賃金の平等を保証すべきだ。", en: "Every company should ______ equality in wages for both men and women.", answer: "ensure" },
+    { unit: "143", jp: "私の両親は兄に海外で学ぶよう勧めている。", en: "My parents are ______ my brother to study abroad.", answer: "encouraging" },
+    { unit: "143", jp: "安全のため、車内では全員シートベルトを締めなければなりません。", en: "Everyone must ______ their seat belts in a car for safety.", answer: "fasten" },
+    { unit: "143", jp: "他国を訪れることは、私たちの視野を広げてくれる。", en: "Visiting other countries can ______ our minds.", answer: "broaden" },
+    { unit: "143", jp: "日本の経済力は弱まりつつあるとしばしば言われる。", en: "It is often said that Japan's economic power is ______.", answer: "weakening" },
+    { unit: "143", jp: "明日、すべての授業は45分に短縮されます。", en: "Tomorrow, every lesson will be ______ to 45 minutes.", answer: "shortened" },
 
     // Unit 144
-    {unit: "144", jp: "彼の勉強に対する態度は最近変わった。", en: "His ______ toward studying has recently changed.", answer: "attitude" },
-    {unit: "144", jp: "その国からの援助の要請に日本は迅速に応じた。", en: "Japan quickly responded to the country's ______ for aid.", answer: "request" },
-    {unit: "144", jp: "スポーツ選手はしばしば子どもたちに大きな影響を与える。", en: "Sports players often have a great ______ on children.", answer: "influence" },
-    {unit: "144", jp: "石油価格の上昇は世界経済に深刻な影響を及ぼした。", en: "The increase in oil prices had a serious ______ on the world economy.", answer: "impact" },
-    {unit: "144", jp: "核兵器は世界平和に対する大きな脅威だ。", en: "Nuclear weapons are a great ______ to world peace.", answer: "threat" },
-    {unit: "144", jp: "このレストランは魚料理の評判が良い。", en: "This restaurant has a good ______ for fish dishes.", answer: "reputation" },
-    {unit: "144", jp: "農場の多くは洪水によってひどい影響［被害］を受けた。", en: "Many farms were badly ______ by the floods.", answer: "affected" },
-    {unit: "144", jp: "笑うことは私たちの健康に良い効果をもたらすと言われている。", en: "Laughing is said to have a positive ______ on our health.", answer: "effect" },
-    {unit: "144", jp: "あなたはすぐに新しい学校に慣れるでしょう。", en: "You will soon ______ to your new school.", answer: "adapt" },
-    {unit: "144", jp: "日本の企業の中には、仕事で使う言葉として英語を採用しているところもある。", en: "Some companies in Japan have ______ English as their business language.", answer: "adopted" },
-    {unit: "144", jp: "この石鹸は敏感な肌の人々に向いています。", en: "This soap is good for people with ______ skin.", answer: "sensitive" },
-    {unit: "144", jp: "分別のある指導者であれば、他国と戦争を始めたりはしないだろう。", en: "______ leaders would not start war against other countries.", answer: "Sensible" },
+    { unit: "144", jp: "彼の勉強に対する態度は最近変わった。", en: "His ______ toward studying has recently changed.", answer: "attitude" },
+    { unit: "144", jp: "その国からの援助の要請に日本は迅速に応じた。", en: "Japan quickly responded to the country's ______ for aid.", answer: "request" },
+    { unit: "144", jp: "スポーツ選手はしばしば子どもたちに大きな影響を与える。", en: "Sports players often have a great ______ on children.", answer: "influence" },
+    { unit: "144", jp: "石油価格の上昇は世界経済に深刻な影響を及ぼした。", en: "The increase in oil prices had a serious ______ on the world economy.", answer: "impact" },
+    { unit: "144", jp: "核兵器は世界平和に対する大きな脅威だ。", en: "Nuclear weapons are a great ______ to world peace.", answer: "threat" },
+    { unit: "144", jp: "このレストランは魚料理の評判が良い。", en: "This restaurant has a good ______ for fish dishes.", answer: "reputation" },
+    { unit: "144", jp: "農場の多くは洪水によってひどい影響［被害］を受けた。", en: "Many farms were badly ______ by the floods.", answer: "affected" },
+    { unit: "144", jp: "笑うことは私たちの健康に良い効果をもたらすと言われている。", en: "Laughing is said to have a positive ______ on our health.", answer: "effect" },
+    { unit: "144", jp: "あなたはすぐに新しい学校に慣れるでしょう。", en: "You will soon ______ to your new school.", answer: "adapt" },
+    { unit: "144", jp: "日本の企業の中には、仕事で使う言葉として英語を採用しているところもある。", en: "Some companies in Japan have ______ English as their business language.", answer: "adopted" },
+    { unit: "144", jp: "この石鹸は敏感な肌の人々に向いています。", en: "This soap is good for people with ______ skin.", answer: "sensitive" },
+    { unit: "144", jp: "分別のある指導者であれば、他国と戦争を始めたりはしないだろう。", en: "______ leaders would not start war against other countries.", answer: "Sensible" },
 
     // Unit 145
-    {unit: "145", jp: "現代農業でさえ、好天に大きく頼っている。", en: "Even modern ______ relies a lot on good weather.", answer: "agriculture" },
-    {unit: "145", jp: "大阪は江戸時代には商業の中心でした。", en: "Osaka was the center of ______ in the Edo era.", answer: "commerce" },
-    {unit: "145", jp: "私たちの町では多くの人が漁業に従事しています。", en: "Many people work in ______ in our town.", answer: "fisheries" },
-    {unit: "145", jp: "日本の経済にとって、かつて林業はとても重要でした。", en: "______ used to be very important for the Japanese economy.", answer: "Forestry" },
-    {unit: "145", jp: "飛行機には手荷物を1つしか持ち込めません。", en: "You can take only one piece of ______ on the plane.", answer: "baggage" },
-    {unit: "145", jp: "私の部屋には家具がたくさんありすぎる。", en: "There is too much ______ in my room.", answer: "furniture" },
-    {unit: "145", jp: "山へハイキングに行く時は暖かい衣類を持っていきなさい。", en: "Take some warm ______ when you go hiking in the mountains.", answer: "clothing" },
-    {unit: "145", jp: "押入れの中に寝具を戻してください。", en: "Please put the ______ back in the closet.", answer: "bedding" },
-    {unit: "145", jp: "その映画の最も感動的なシーンは、主人公が死ぬときでした。", en: "The most moving ______ in the movie was when the hero died.", answer: "scene" },
-    {unit: "145", jp: "私たちは山の頂上からの美しい景色を楽しみました。", en: "We enjoyed the beautiful ______ from the top of the mountain.", answer: "scenery" },
-    {unit: "145", jp: "今日の授業では、英語で詩を書きました。", en: "In today's class, we wrote a ______ in English.", answer: "poem" },
-    {unit: "145", jp: "俳句は日本の詩の形式の1つです。", en: "Haiku is a form of Japanese ______.", answer: "poetry" },
+    { unit: "145", jp: "現代農業でさえ、好天に大きく頼っている。", en: "Even modern ______ relies a lot on good weather.", answer: "agriculture" },
+    { unit: "145", jp: "大阪は江戸時代には商業の中心でした。", en: "Osaka was the center of ______ in the Edo era.", answer: "commerce" },
+    { unit: "145", jp: "私たちの町では多くの人が漁業に従事しています。", en: "Many people work in ______ in our town.", answer: "fisheries" },
+    { unit: "145", jp: "日本の経済にとって、かつて林業はとても重要でした。", en: "______ used to be very important for the Japanese economy.", answer: "Forestry" },
+    { unit: "145", jp: "飛行機には手荷物を1つしか持ち込めません。", en: "You can take only one piece of ______ on the plane.", answer: "baggage" },
+    { unit: "145", jp: "私の部屋には家具がたくさんありすぎる。", en: "There is too much ______ in my room.", answer: "furniture" },
+    { unit: "145", jp: "山へハイキングに行く時は暖かい衣類を持っていきなさい。", en: "Take some warm ______ when you go hiking in the mountains.", answer: "clothing" },
+    { unit: "145", jp: "押入れの中に寝具を戻してください。", en: "Please put the ______ back in the closet.", answer: "bedding" },
+    { unit: "145", jp: "その映画の最も感動的なシーンは、主人公が死ぬときでした。", en: "The most moving ______ in the movie was when the hero died.", answer: "scene" },
+    { unit: "145", jp: "私たちは山の頂上からの美しい景色を楽しみました。", en: "We enjoyed the beautiful ______ from the top of the mountain.", answer: "scenery" },
+    { unit: "145", jp: "今日の授業では、英語で詩を書きました。", en: "In today's class, we wrote a ______ in English.", answer: "poem" },
+    { unit: "145", jp: "俳句は日本の詩の形式の1つです。", en: "Haiku is a form of Japanese ______.", answer: "poetry" }
 ];                                                                                                  
 
 let currentList = words.slice();                                                                    
@@ -635,33 +691,65 @@ let correct = 0;
 let answered = false;                                                                               
 let wrongQuestions = [];                                                                            
 
-// ★5Unitごとのグループを自動計算して画面に生成する関数
+// 起動時にレポート情報を取得してエラーサインを反映する
+window.addEventListener("DOMContentLoaded", () => {
+    renderUnitGroups();
+    fetchReportsAndSync();
+    showQuestion();
+});
+
+// GASからレポート一覧を取得して反映する関数
+function fetchReportsAndSync() {
+    if (!GAS_URL.startsWith("http")) return;
+    fetch(GAS_URL + "?action=getReports")
+        .then(res => res.json())
+        .then(data => {
+            if (Array.isArray(data)) {
+                globalReports = data;
+                updateQuestionErrorSign();
+            }
+        })
+        .catch(err => console.error("レポート取得失敗:", err));
+}
+
+// 現在の問題に未解決の間違い報告があるかチェックしてサインを表示
+function updateQuestionErrorSign() {
+    const q = currentList[currentIndex];
+    const sign = document.getElementById("questionErrorSign");
+    if (!q || !sign) return;
+
+    const hasError = globalReports.some(r => 
+        r.type === 'word_error' && 
+        r.status === 'pending' && 
+        String(r.unit) === String(q.unit) && 
+        r.question === q.jp
+    );
+
+    sign.style.display = hasError ? "inline" : "none";
+}
+
+// 5Unitごとのグループを自動生成
 function renderUnitGroups() {
     const container = document.getElementById("unitGroupsContainer");
     container.innerHTML = "";
 
-    // 存在するUnitの番号を数値として昇順ソート
     const uniqueUnits = [...new Set(words.map(w => parseInt(w.unit)))].sort((a, b) => a - b);
     if (uniqueUnits.length === 0) return;
 
-    // 5Unit単位（例: 116-120, 121-125...）の範囲グループを作成
     const minUnit = uniqueUnits[0];
     const maxUnit = uniqueUnits[uniqueUnits.length - 1];
-
     let currentGroupStart = minUnit;
 
     while (currentGroupStart <= maxUnit) {
         let currentGroupEnd = currentGroupStart + 4;
-        
         const unitsInGroup = uniqueUnits.filter(u => u >= currentGroupStart && u <= currentGroupEnd);
 
         if (unitsInGroup.length > 0) {
             const details = document.createElement("details");
             details.className = "unit-group";
-            details.open = false; // ★ 最初は閉じた状態にする
+            details.open = false; // 最初は閉じた状態
 
             const groupTitle = `Unit ${currentGroupStart}〜${currentGroupEnd}`;
-
             details.innerHTML = `
                 <summary>
                     <label class="group-label" onclick="event.stopPropagation()">
@@ -673,21 +761,16 @@ function renderUnitGroups() {
                     ${unitsInGroup.map(u => `<label><input type="checkbox" name="unit" value="${u}" checked> Unit ${u}</label>`).join("")}
                 </div>
             `;
-
             container.appendChild(details);
         }
-
         currentGroupStart += 5;
     }
 
-    // イベントリスナーの登録
     document.querySelectorAll('.group-checkbox').forEach(groupBox => {
         groupBox.addEventListener('change', function(event) {
             event.stopPropagation();
             const group = this.closest('.unit-group');
-            group.querySelectorAll('input[name="unit"]').forEach(box => {
-                box.checked = this.checked;
-            });
+            group.querySelectorAll('input[name="unit"]').forEach(box => { box.checked = this.checked; });
             this.indeterminate = false;
         });
     });
@@ -695,15 +778,11 @@ function renderUnitGroups() {
     document.querySelectorAll('input[name="unit"]').forEach(box => {
         box.addEventListener('change', updateGroupCheckboxes);
     });
-
     updateGroupCheckboxes();
 }
 
-// ★ すべてつける・すべて外す機能の関数
 function setAllUnits(checkStatus) {
-    document.querySelectorAll('#unitGroupsContainer input[type="checkbox"]').forEach(box => {
-        box.checked = checkStatus;
-    });
+    document.querySelectorAll('#unitGroupsContainer input[type="checkbox"]').forEach(box => { box.checked = checkStatus; });
     updateGroupCheckboxes();
 }
 
@@ -714,22 +793,17 @@ function updateGroupCheckboxes() {
         const checkedCount = boxes.filter(box => box.checked).length;
 
         if (checkedCount === 0) {
-            groupBox.checked = false;
-            groupBox.indeterminate = false;
+            groupBox.checked = false; groupBox.indeterminate = false;
         } else if (checkedCount === boxes.length) {
-            groupBox.checked = true;
-            groupBox.indeterminate = false;
+            groupBox.checked = true; groupBox.indeterminate = false;
         } else {
-            groupBox.checked = false;
-            groupBox.indeterminate = true;
+            groupBox.checked = false; groupBox.indeterminate = true;
         }
     });
 }
 
 function startQuiz() {                                                                              
-    const selectedUnits = Array.from(                                                               
-        document.querySelectorAll('input[name="unit"]:checked')                                    
-    ).map(input => input.value);                                                                    
+    const selectedUnits = Array.from(document.querySelectorAll('input[name="unit"]:checked')).map(input => input.value);                                                                    
 
     if (selectedUnits.length === 0) {                                                               
         document.getElementById("result").textContent = "Unitを1つ以上選択してください。";                       
@@ -755,7 +829,6 @@ function startQuiz() {
 
 function showQuestion() {                                                                           
     const q = currentList[currentIndex];                                                            
-
     document.getElementById("japanese").textContent = q.jp;                                         
     document.getElementById("english").textContent = q.en;                                          
     document.getElementById("answer").value = "";                                                   
@@ -763,13 +836,12 @@ function showQuestion() {
     document.getElementById("result").textContent = "";                                             
     answered = false;                                                                               
 
-    document.getElementById("score").textContent =                                                  
-        `${currentIndex + 1} / ${currentList.length} 正解：${correct}`;                              
+    document.getElementById("score").textContent = `${currentIndex + 1} / ${currentList.length} 正解：${correct}`;
+    updateQuestionErrorSign();
 }                                                                                                   
 
 function checkAnswer() {                                                                            
     if (answered) return;                                                                           
-
     const input = document.getElementById("answer").value.trim().replace(/\s*\/\s*/g, " ").replace(/\s+/g, " ");                                   
     const answer = currentList[currentIndex].answer.trim().replace(/\s*\/\s*/g, " ").replace(/\s+/g, " ");                                                
 
@@ -777,17 +849,13 @@ function checkAnswer() {
         document.getElementById("result").textContent = "○ 正解！";                                    
         correct++;                                                                                  
     } else {                                                                                        
-        document.getElementById("result").textContent =                                             
-            `× 不正解 答え：${answer}`;                                                                 
+        document.getElementById("result").textContent = `× 不正解 答え：${answer}`;                                  
         if (!wrongQuestions.includes(currentList[currentIndex])) {                                  
             wrongQuestions.push(currentList[currentIndex]);                                         
         }                                                                                           
     }                                                                                               
-
     answered = true;                                                                                
-
-    document.getElementById("score").textContent =                                                  
-        `${currentIndex + 1} / ${currentList.length} 正解：${correct}`;                              
+    document.getElementById("score").textContent = `${currentIndex + 1} / ${currentList.length} 正解：${correct}`;                              
 }                                                                                                   
 
 function nextQuestion() {                                                                           
@@ -795,8 +863,7 @@ function nextQuestion() {
         currentIndex++;                                                                             
         showQuestion();                                                                             
     } else {                                                                                        
-        document.getElementById("result").textContent =                                             
-            `終了！ ${currentList.length}問中 ${correct}問正解`;                                          
+        document.getElementById("result").textContent = `終了！ ${currentList.length}問中 ${correct}問正解`;                                          
         document.getElementById("finishOptions").style.display = "block";                           
         document.getElementById("retryWrongButton").disabled = wrongQuestions.length === 0;         
         document.getElementById("retryWrongButton").textContent = "間違った問題を解きなおす";                   
@@ -814,20 +881,168 @@ function retryWrong() {
     showQuestion();                                                                                 
 }                                                                                                   
 
+// --- 追加機能のダイアログ・通信処理 ---
+
+function openReportModal() {
+    const q = currentList[currentIndex];
+    document.getElementById("reportTargetInfo").textContent = `[Unit ${q.unit}] ${q.jp}`;
+    document.getElementById("reportDetailText").value = "";
+    document.getElementById("reportModal").style.display = "flex";
+}
+
+function closeReportModal() {
+    document.getElementById("reportModal").style.display = "none";
+}
+
+function submitWordError() {
+    const q = currentList[currentIndex];
+    const detail = document.getElementById("reportDetailText").value.trim();
+    if (!detail) {
+        alert("間違いの内容を入力してください。");
+        return;
+    }
+
+    const payload = {
+        action: "submitReport",
+        type: "word_error",
+        unit: q.unit,
+        question: q.jp,
+        content: `[Unit ${q.unit}] ${q.jp} (正解: ${q.answer}) - 理由: ${detail}`
+    };
+
+    fetch(GAS_URL, { method: "POST", body: JSON.stringify(payload) })
+        .then(res => res.json())
+        .then(data => {
+            if (data.success) {
+                alert("間違い報告を送信しました。LINEへも通知されました。");
+                closeReportModal();
+                fetchReportsAndSync();
+            } else {
+                alert("送信に失敗しました。");
+            }
+        })
+        .catch(err => alert("通信エラーが発生しました。"));
+}
+
+function submitGeneralRequest() {
+    const text = document.getElementById("generalRequestText").value.trim();
+    if (!text) {
+        alert("要望や報告内容を入力してください。");
+        return;
+    }
+
+    const payload = {
+        action: "submitReport",
+        type: "general_request",
+        content: text
+    };
+
+    fetch(GAS_URL, { method: "POST", body: JSON.stringify(payload) })
+        .then(res => res.json())
+        .then(data => {
+            if (data.success) {
+                alert("要望を送信しました。ありがとうございます！");
+                document.getElementById("generalRequestText").value = "";
+            } else {
+                alert("送信に失敗しました。");
+            }
+        })
+        .catch(err => alert("通信エラーが発生しました。"));
+}
+
+// 管理者画面を開く（入力された数字や動作が「26136」の場合に認証）
 document.getElementById("answer").addEventListener("keydown", function(event) {                     
-    if (event.key === "Enter") {                                                                    
+    if (event.key === "Enter") {
+        const val = this.value.trim();
+        if (val === "26136") {
+            this.value = "";
+            authAdminAndOpen();
+            return;
+        }
+
         if (!answered) {                                                                            
             checkAnswer();                                                                          
         } else {                                                                                    
             nextQuestion();                                                                         
         }                                                                                           
     }                                                                                               
-});                                                                                                 
+});
 
-// 初期化処理：画面読み込み時に5Unit単位のグループを自動生成
-renderUnitGroups();
-showQuestion();                                                                                     
+function authAdminAndOpen() {
+    const code = prompt("管理者コードを入力してください：");
+    if (!code) return;
+
+    fetch(GAS_URL, {
+        method: "POST",
+        body: JSON.stringify({ action: "authAdmin", code: code })
+    })
+    .then(res => res.json())
+    .then(data => {
+        if (data.success) {
+            loadAdminDashboard();
+            document.getElementById("adminModal").style.display = "flex";
+        } else {
+            alert("コードが違います。");
+        }
+    })
+    .catch(err => alert("認証エラーが発生しました。"));
+}
+
+function loadAdminDashboard() {
+    const listDiv = document.getElementById("adminReportList");
+    listDiv.innerHTML = "読み込み中...";
+
+    fetch(GAS_URL + "?action=getReports")
+        .then(res => res.json())
+        .then(data => {
+            if (!Array.isArray(data) || data.length === 0) {
+                listDiv.innerHTML = "<p>現在、未処理の報告・要望はありません。</p>";
+                return;
+            }
+
+            let html = "<table style='width:100%; border-collapse:collapse;'>";
+            html += "<tr style='background:#eee; text-align:left;'><th style='padding:6px;'>種類</th><th style='padding:6px;'>内容</th><th style='padding:6px;'>状態</th><th style='padding:6px;'>操作</th></tr>";
+            
+            data.forEach(r => {
+                const typeLabel = r.type === 'word_error' ? '問題間違い' : '一般要望';
+                const statusLabel = r.status === 'resolved' ? '✅ 修正済み' : '⏳ 未処理';
+                html += `<tr style='border-bottom:1px solid #ddd;'>
+                    <td style='padding:6px;'>${typeLabel}</td>
+                    <td style='padding:6px; word-break:break-all;'>${r.content}</td>
+                    <td style='padding:6px;'>${statusLabel}</td>
+                    <td style='padding:6px;'>`;
+                if (r.status !== 'resolved') {
+                    html += `<button type='button' onclick='resolveReport("${r.id}")' style='background:#2e6b45; color:white; font-size:12px; padding:4px 8px; margin:0;'>修正しました</button>`;
+                }
+                html += `</td></tr>`;
+            });
+            html += "</table>";
+            listDiv.innerHTML = html;
+        })
+        .catch(err => {
+            listDiv.innerHTML = "データの読み込みに失敗しました。";
+        });
+}
+
+function resolveReport(id) {
+    fetch(GAS_URL, {
+        method: "POST",
+        body: JSON.stringify({ action: "resolveReport", id: id })
+    })
+    .then(res => res.json())
+    .then(data => {
+        if (data.success) {
+            loadAdminDashboard();
+            fetchReportsAndSync(); // サインを更新
+        } else {
+            alert("更新に失敗しました。");
+        }
+    });
+}
+
+function closeAdminModal() {
+    document.getElementById("adminModal").style.display = "none";
+}
 </script>                                                                                          
 </body>                                                                                            
 </html>
-```[cite: 1]

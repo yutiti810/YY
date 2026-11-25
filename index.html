@@ -1018,6 +1018,18 @@ function checkAnswer() {
     document.getElementById("score").textContent = `${currentIndex + 1} / ${currentList.length} 正解：${correct}`;
 }
 
+function nextQuestion() {
+    if (currentIndex < currentList.length - 1) {
+        currentIndex++;
+        showQuestion();
+    } else {
+        document.getElementById("result").textContent = `終了！ ${currentList.length}問中 ${correct}問正解`;
+        document.getElementById("finishOptions").style.display = "block";
+        document.getElementById("retryWrongButton").disabled = wrongQuestions.length === 0;
+        document.getElementById("retryWrongButton").textContent = "間違った問題を解きなおす";
+    }
+}
+
 function retryWrong() {
     if (wrongQuestions.length === 0) return;
     currentList = wrongQuestions.slice();

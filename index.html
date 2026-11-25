@@ -238,20 +238,19 @@
         <button id="retryWrongButton" class="primary" onclick="retryWrong()">間違った問題を解きなおす</button>
     </div>                                                                                         
 
-    <!-- 全体要望・LINE連携・管理者入口エリア -->
+    <!-- 全体要望エリア -->
     <div class="extra-section">
         <h3 style="margin-top:0; color:#333; font-size:16px;">ご意見・ご要望 / サポート</h3>
         <textarea id="generalRequestText" placeholder="全体への要望やバグ報告をここに入力..." style="width:100%; height:60px; font-size:14px; padding:8px; border:1px solid #ccc; border-radius:6px; box-sizing:border-box;"></textarea>
         <button type="button" onclick="submitGeneralRequest()" style="background:#337ab7; color:white; font-size:14px; padding:6px 16px; margin-top:8px;">要望を送信する</button>
-        </div>
     </div>
 </div>
 
-<!-- 管理者用ログインモーダル（「26136」入力用） -->
+<!-- 管理者用モーダル -->
 <div id="adminModal" class="modal">
     <div class="modal-content">
         <h3 style="margin-top:0;">管理者専用ページ</h3>
-        <p style="font-size: 14px; color: #666;">送信された間違い報告や要望の一覧です。「修正済み」を押すと報告サインが消えます。</p>
+        <p style="font-size: 14px; color: #666;">送信された間違い報告や要望の一覧です。「修正しました」を押すと一覧と報告サインが消えます。</p>
         <div id="adminReportList" style="margin-bottom: 15px; font-size: 14px; max-height: 300px; overflow-y: auto;">読み込み中...</div>
         <button type="button" onclick="closeAdminModal()" style="background:#666; color:white; font-size:14px; padding:6px 14px;">閉じる</button>
     </div>
@@ -279,7 +278,7 @@ const GAS_URL = "https://script.google.com/macros/s/AKfycbynPmP4T2UuUQ4Rq6V6zqZW
 // 全体のレポート・報告リスト（キャッシュ用）
 let globalReports = [];
 
-// 単語データ（そのまま保持）
+// 単語データ（Unit 116〜150）
 const words = [                                                                                     
     // Unit 116
     { unit: "116", jp: "彼らは勇敢に敵と戦った。", en: "They fought bravely against the ______.", answer: "enemy" },
@@ -570,7 +569,7 @@ const words = [
     { unit: "137", jp: "この動詞の名詞形は何ですか。", en: "What is the ______ form of this verb?", answer: "noun" },
     { unit: "137", jp: "形容詞は普通名詞の後ろではなく、前に置かれます。", en: "______ are usually put before nouns, not after nouns.", answer: "Adjectives" },
     { unit: "137", jp: "副詞を正しく使うのは難しい。", en: "It is sometimes difficult to use ______ correctly.", answer: "adverbs" },
-    { unit: "137", jp: "前置詞は名詞の前に置かれます。", en:" ______ are put before nouns.", answer: "Prepositions" },
+    { unit: "137", jp: "前置詞は名詞の前に置かれます。", en: "______ are put before nouns.", answer: "Prepositions" },
     { unit: "137", jp: "古代文明の中には大河の近くで始まったものもある。", en: "Some ______ ______ started near large rivers.", answer: "ancient civilizations" },
     { unit: "137", jp: "難民を助けるためにいくつかの組織が設立された。", en: "To help the refugees, some ______ were ______.", answer: "organizations established" },
     { unit: "137", jp: "人々は今でも、海中に隠された宝を探している。", en: "People still look for ______ ______ under the sea.", answer: "hidden treasure" },
@@ -796,7 +795,7 @@ function updateQuestionErrorSign() {
     sign.style.display = hasError ? "inline" : "none";
 }
 
-// 5Unitごとのグループを自動生成
+// グループ生成（125までは5Unitごと、126〜150は「期末テスト範囲」として囲む）
 function renderUnitGroups() {
     const container = document.getElementById("unitGroupsContainer");
     container.innerHTML = "";
@@ -804,34 +803,44 @@ function renderUnitGroups() {
     const uniqueUnits = [...new Set(words.map(w => parseInt(w.unit)))].sort((a, b) => a - b);
     if (uniqueUnits.length === 0) return;
 
-    const minUnit = uniqueUnits[0];
-    const maxUnit = uniqueUnits[uniqueUnits.length - 1];
-    let currentGroupStart = minUnit;
+    // 1. 125までのUnitは5刻みでグループ化
+    const preFinalUnits = uniqueUnits.filter(u => u <= 125);
+    if (preFinalUnits.length > 0) {
+        let currentGroupStart = preFinalUnits[0];
+        const maxPreFinal = preFinalUnits[preFinalUnits.length - 1];
 
-    while (currentGroupStart <= maxUnit) {
-        let currentGroupEnd = currentGroupStart + 4;
-        const unitsInGroup = uniqueUnits.filter(u => u >= currentGroupStart && u <= currentGroupEnd);
+        while (currentGroupStart <= maxPreFinal) {
+            let currentGroupEnd = currentGroupStart + 4;
+            const unitsInGroup = preFinalUnits.filter(u => u >= currentGroupStart && u <= currentGroupEnd);
 
-        if (unitsInGroup.length > 0) {
-            const details = document.createElement("details");
-            details.className = "unit-group";
-            details.open = false; // 最初は閉じた状態
-
-            const groupTitle = `Unit ${currentGroupStart}〜${currentGroupEnd}`;
-            details.innerHTML = `
-                <summary>
-                    <label class="group-label" onclick="event.stopPropagation()">
-                        <input type="checkbox" class="group-checkbox" checked>
-                        ${groupTitle}
-                    </label>
-                </summary>
-                <div class="unit-options">
-                    ${unitsInGroup.map(u => `<label><input type="checkbox" name="unit" value="${u}" checked> Unit ${u}</label>`).join("")}
-                </div>
-            `;
-            container.appendChild(details);
+            if (unitsInGroup.length > 0) {
+                container.appendChild(createGroupElement(`Unit ${currentGroupStart}〜${currentGroupEnd}`, unitsInGroup, false));
+            }
+            currentGroupStart += 5;
         }
-        currentGroupStart += 5;
+    }
+
+    // 2. 126〜150を「期末テスト範囲」としてまとめて囲む
+    const finalExamUnits = uniqueUnits.filter(u => u >= 126 && u <= 150);
+    if (finalExamUnits.length > 0) {
+        container.appendChild(createGroupElement("期末テスト範囲（Unit 126〜150）", finalExamUnits, true));
+    }
+
+    // 3. 151以降があれば5刻みで表示
+    const afterFinalUnits = uniqueUnits.filter(u => u > 150);
+    if (afterFinalUnits.length > 0) {
+        let currentGroupStart = afterFinalUnits[0];
+        const maxAfter = afterFinalUnits[afterFinalUnits.length - 1];
+
+        while (currentGroupStart <= maxAfter) {
+            let currentGroupEnd = currentGroupStart + 4;
+            const unitsInGroup = afterFinalUnits.filter(u => u >= currentGroupStart && u <= currentGroupEnd);
+
+            if (unitsInGroup.length > 0) {
+                container.appendChild(createGroupElement(`Unit ${currentGroupStart}〜${currentGroupEnd}`, unitsInGroup, false));
+            }
+            currentGroupStart += 5;
+        }
     }
 
     document.querySelectorAll('.group-checkbox').forEach(groupBox => {
@@ -847,6 +856,34 @@ function renderUnitGroups() {
         box.addEventListener('change', updateGroupCheckboxes);
     });
     updateGroupCheckboxes();
+}
+
+function createGroupElement(titleText, unitsInGroup, isFinalExam) {
+    const details = document.createElement("details");
+    details.className = "unit-group";
+    details.open = isFinalExam;
+
+    if (isFinalExam) {
+        details.style.border = "2px solid #1e5aa8";
+        details.style.backgroundColor = "#f4f8ff";
+    }
+
+    const summaryStyle = isFinalExam
+        ? "background: #dceaff; color: #0d3b75;"
+        : "";
+
+    details.innerHTML = `
+        <summary style="${summaryStyle}">
+            <label class="group-label" onclick="event.stopPropagation()">
+                <input type="checkbox" class="group-checkbox" checked>
+                ${titleText}
+            </label>
+        </summary>
+        <div class="unit-options">
+            ${unitsInGroup.map(u => `<label><input type="checkbox" name="unit" value="${u}" checked> Unit ${u}</label>`).join("")}
+        </div>
+    `;
+    return details;
 }
 
 function setAllUnits(checkStatus) {
@@ -1018,7 +1055,6 @@ function submitGeneralRequest() {
         .catch(err => alert("通信エラーが発生しました。"));
 }
 
-// 管理者画面を開く（入力された数字や動作が「26136」の場合に認証）
 document.getElementById("answer").addEventListener("keydown", function(event) {                     
     if (event.key === "Enter") {
         const val = this.value.trim();
@@ -1069,7 +1105,6 @@ function loadAdminDashboard() {
             }
 
             let html = "<table style='width:100%; border-collapse:collapse;'>";
-            // 変えた後：状態列を削除し、未処理だけが表示されるようにすっきりさせた
             html += "<tr style='background:#eee; text-align:left;'><th style='padding:6px;'>種類</th><th style='padding:6px;'>内容</th><th style='padding:6px;'>操作</th></tr>";
             
             data.forEach(r => {
@@ -1098,7 +1133,7 @@ function resolveReport(id) {
     .then(data => {
         if (data.success) {
             loadAdminDashboard();
-            fetchReportsAndSync(); // サインを更新
+            fetchReportsAndSync();
         } else {
             alert("更新に失敗しました。");
         }
@@ -1110,4 +1145,4 @@ function closeAdminModal() {
 }
 </script>                                                                                          
 </body>                                                                                            
-</html>
+</html>[cite: 1, 2, 3, 4, 5, 6]

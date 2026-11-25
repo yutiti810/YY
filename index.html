@@ -1,244 +1,248 @@
-<!DOCTYPE html>                                                                                    
-<html lang="ja">                                                                                   
-<head>                                                                                             
-<meta charset="UTF-8">                                                                             
-<meta name="viewport" content="width=device-width, initial-scale=1.0">                             
-<title>英単語クイズ</title>                                                                             
-<style>                                                                                            
-    body {                                                                                          
-        font-family: Meiryo, sans-serif;                                                            
-        background-color: whitesmoke;                                                               
-        margin: 0;                                                                                  
-        padding: 30px;                                                                              
-    }                                                                                               
-    .quiz {                                                                                         
-        max-width: 850px;                                                                           
-        margin: auto;                                                                               
-        background: white;                                                                          
-        padding: 35px;                                                                              
-        border-radius: 18px;                                                                        
-        box-shadow: 0 5px 20px gray;                                                                
-    }                                                                                               
-    h1 {                                                                                            
-        margin-top: 0;                                                                              
-        color: navy;                                                                                
-    }                                                                                               
-    .info {                                                                                         
-        color: gray;                                                                                
-        margin-bottom: 25px;                                                                        
-    }                                                                                               
-    .japanese {                                                                                     
-        font-size: 20px;                                                                            
-        margin-bottom: 25px;                                                                        
-        line-height: 1.7;                                                                           
-    }                                                                                               
-    .english {                                                                                      
-        font-size: 25px;                                                                            
-        line-height: 1.7;                                                                           
-        margin-bottom: 25px;                                                                        
-    }                                                                                               
-    input[type="text"] {                                                                            
-        width: 90%;                                                                                 
-        max-width: 600px;                                                                           
-        font-size: 22px;                                                                            
-        padding: 12px;                                                                              
-        border: 2px solid gray;                                                                     
-        border-radius: 8px;                                                                         
-    }                                                                                               
-    button {                                                                                        
-        font-size: 18px;                                                                            
-        padding: 10px 22px;                                                                         
-        margin: 12px 5px 0 0;                                                                       
-        border: none;                                                                               
-        border-radius: 8px;                                                                         
-        cursor: pointer;                                                                            
-    }                                                                                               
-    #answerButton {                                                                                 
-        background-color: navy;                                                                     
-        color: white;                                                                               
-    }                                                                                               
-    #nextButton {                                                                                   
-        background-color: lightgray;                                                                
-    }                                                                                               
-    #result {                                                                                       
-        font-size: 20px;                                                                            
-        font-weight: bold;                                                                          
-        margin-top: 20px;                                                                           
-        min-height: 30px;                                                                           
-    }                                                                                               
-    .score {                                                                                        
-        font-size: 18px;                                                                            
-        margin-top: 20px;                                                                           
-    }                                                                                               
-    select {                                                                                        
-        font-size: 16px;                                                                            
-        padding: 7px;                                                                               
-    }                                                                                               
-    .settings {                                                                                     
-        margin-bottom: 25px;                                                                        
-        padding: 18px;                                                                              
-        background: #f3f5f8;                                                                        
-        border-radius: 10px;                                                                        
-    }                                                                                               
-    .setting-title {                                                                                
-        font-weight: bold;                                                                          
-        margin-bottom: 12px;                                                                        
-        display: flex;                                                                              
-        justify-content: space-between;                                                             
-        align-items: center;                                                                        
-        flex-wrap: wrap;                                                                            
-        gap: 8px;                                                                                   
-    }                                                                                               
-    .unit-controls button {                                                                         
-        font-size: 13px;                                                                            
-        padding: 4px 10px;                                                                          
-        margin: 0 0 0 5px;                                                                          
-        background: #555;                                                                           
-        color: white;                                                                               
-    }                                                                                               
-    .unit-options {                                                                                 
-        display: flex;                                                                              
-        flex-wrap: wrap;                                                                            
-        gap: 10px 18px;                                                                             
-        margin-bottom: 16px;                                                                        
-    }                                                                                               
-    .unit-options label {                                                                           
-        display: inline-flex;                                                                       
-        align-items: center;                                                                        
-        gap: 5px;                                                                                   
-    }                                                                                               
-    .unit-options input {                                                                           
-        width: auto;                                                                                
-        max-width: none;                                                                            
-        margin: 0;                                                                                  
-    }                                                                                               
-    .unit-groups {                                                                                  
-        display: grid;                                                                              
-        gap: 12px;                                                                                  
-        margin-bottom: 16px;                                                                        
-    }                                                                                               
-    .unit-group {                                                                                   
-        border: 1px solid #d5dbe2;                                                                  
-        border-radius: 10px;                                                                        
-        background: white;                                                                          
-        overflow: hidden;                                                                           
-    }                                                                                               
-    .unit-group > summary {                                                                         
-        padding: 12px 14px;                                                                         
-        cursor: pointer;                                                                            
-        font-weight: bold;                                                                          
-        background: #eef2f6;                                                                        
-        list-style-position: inside;                                                                
-    }                                                                                               
-    .unit-group[open] > summary {                                                                   
-        border-bottom: 1px solid #d5dbe2;                                                           
-    }                                                                                               
-    .group-label {                                                                                  
-        display: inline-flex;                                                                       
-        align-items: center;                                                                        
-        gap: 7px;                                                                                   
-        cursor: pointer;                                                                            
-    }                                                                                               
-    .group-label input {                                                                            
-        width: auto;                                                                                
-        max-width: none;                                                                            
-        margin: 0;                                                                                  
-    }                                                                                               
-    .unit-group .unit-options {                                                                     
-        padding: 14px;                                                                              
-        margin-bottom: 0;                                                                           
-    }                                                                                               
-    .setting-row {                                                                                  
-        display: flex;                                                                              
-        flex-wrap: wrap;                                                                            
-        align-items: center;                                                                        
-        gap: 8px;                                                                                   
-    }                                                                                               
-    .setting-row button {                                                                           
-        margin: 0;                                                                                  
-        background: #2e6b45;                                                                        
-        color: white;                                                                               
-    }                                                                                               
-    /* 追加機能のスタイル */                                                                          
-    .extra-section {                                                                                
-        margin-top: 30px;                                                                           
-        padding: 15px;                                                                              
-        background: #fff;                                                                           
-        border: 1px solid #ddd;                                                                     
-        border-radius: 10px;                                                                        
-    }                                                                                               
-    .modal {                                                                                        
-        display: none;                                                                              
-        position: fixed;                                                                            
-        top: 0; left: 0; width: 100%; height: 100%;                                                 
-        background: rgba(0,0,0,0.5);                                                                
-        justify-content: center; align-items: center;                                               
-        z-index: 1000;                                                                              
-    }                                                                                               
-    .modal-content {                                                                                
-        background: white;                                                                          
-        padding: 25px;                                                                              
-        border-radius: 10px;                                                                        
-        width: 90%; max-width: 500px;                                                               
-        max-height: 80vh; overflow-y: auto;                                                         
-    }                                                                                               
-    @media screen and (min-width: 900px) {                                                          
-        .quiz { max-width: 980px; }                                                                 
-        .japanese { font-size: 23px; }                                                              
-        .english { font-size: 30px; line-height: 1.75; }                                              
-        input[type="text"] { font-size: 24px; }                                                     
-    }                                                                                               
-</style>                                                                                           
-</head>                                                                                            
-<body>                                                                                             
-<div class="quiz">                                                                                 
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>英単語クイズ</title>
+<style>
+    body {
+        font-family: Meiryo, sans-serif;
+        background-color: whitesmoke;
+        margin: 0;
+        padding: 30px;
+    }
+    .quiz {
+        max-width: 850px;
+        margin: auto;
+        background: white;
+        padding: 35px;
+        border-radius: 18px;
+        box-shadow: 0 5px 20px gray;
+    }
+    h1 {
+        margin-top: 0;
+        color: navy;
+    }
+    .info {
+        color: gray;
+        margin-bottom: 25px;
+    }
+    .japanese {
+        font-size: 20px;
+        margin-bottom: 25px;
+        line-height: 1.7;
+    }
+    .english {
+        font-size: 25px;
+        line-height: 1.7;
+        margin-bottom: 25px;
+    }
+    input[type="text"] {
+        width: 90%;
+        max-width: 600px;
+        font-size: 22px;
+        padding: 12px;
+        border: 2px solid gray;
+        border-radius: 8px;
+    }
+    button {
+        font-size: 18px;
+        padding: 10px 22px;
+        margin: 12px 5px 0 0;
+        border: none;
+        border-radius: 8px;
+        cursor: pointer;
+    }
+    #answerButton {
+        background-color: navy;
+        color: white;
+    }
+    #nextButton {
+        background-color: lightgray;
+    }
+    #result {
+        font-size: 20px;
+        font-weight: bold;
+        margin-top: 20px;
+        min-height: 30px;
+    }
+    .score {
+        font-size: 18px;
+        margin-top: 20px;
+    }
+    select {
+        font-size: 16px;
+        padding: 7px;
+    }
+    .settings {
+        margin-bottom: 25px;
+        padding: 18px;
+        background: #f3f5f8;
+        border-radius: 10px;
+    }
+    .setting-title {
+        font-weight: bold;
+        margin-bottom: 12px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        flex-wrap: wrap;
+        gap: 8px;
+    }
+    .unit-controls button {
+        font-size: 13px;
+        padding: 4px 10px;
+        margin: 0 0 0 5px;
+        background: #555;
+        color: white;
+    }
+    .unit-options {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 10px 18px;
+        margin-bottom: 16px;
+    }
+    .unit-options label {
+        display: inline-flex;
+        align-items: center;
+        gap: 5px;
+    }
+    .unit-options input {
+        width: auto;
+        max-width: none;
+        margin: 0;
+    }
+    .unit-groups {
+        display: grid;
+        gap: 12px;
+        margin-bottom: 16px;
+    }
+    .unit-group {
+        border: 1px solid #d5dbe2;
+        border-radius: 10px;
+        background: white;
+        overflow: hidden;
+    }
+    .unit-group > summary {
+        padding: 12px 14px;
+        cursor: pointer;
+        font-weight: bold;
+        background: #eef2f6;
+        list-style-position: inside;
+    }
+    .unit-group[open] > summary {
+        border-bottom: 1px solid #d5dbe2;
+    }
+    .group-label {
+        display: inline-flex;
+        align-items: center;
+        gap: 7px;
+        cursor: pointer;
+    }
+    .group-label input {
+        width: auto;
+        max-width: none;
+        margin: 0;
+    }
+    .unit-group .unit-options {
+        padding: 14px;
+        margin-bottom: 0;
+    }
+    .setting-row {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+        gap: 8px;
+    }
+    .setting-row button {
+        margin: 0;
+        background: #2e6b45;
+        color: white;
+    }
+    /* 追加機能のスタイル */
+    .extra-section {
+        margin-top: 30px;
+        padding: 15px;
+        background: #fff;
+        border: 1px solid #ddd;
+        border-radius: 10px;
+    }
+    .modal {
+        display: none;
+        position: fixed;
+        top: 0; left: 0; width: 100%; height: 100%;
+        background: rgba(0,0,0,0.5);
+        justify-content: center; align-items: center;
+        z-index: 1000;
+    }
+    .modal-content {
+        background: white;
+        padding: 25px;
+        border-radius: 10px;
+        width: 90%; max-width: 500px;
+        max-height: 80vh; overflow-y: auto;
+    }
+    @media screen and (min-width: 900px) {
+        .quiz { max-width: 980px; }
+        .japanese { font-size: 23px; }
+        .english { font-size: 30px; line-height: 1.75; }
+        input[type="text"] { font-size: 24px; }
+    }
+</style>
+</head>
+<body>
+<div class="quiz">
+    <!-- タイトルと右上のLINE友だち追加ボタン -->
     <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; flex-wrap: wrap; gap: 10px;">
         <h1 style="margin: 0; color: navy;">英単語クイズ</h1>
         <a href="https://lin.ee/NvPda8F" target="_blank" style="display: inline-block; background: #06C755; color: white; font-weight: bold; padding: 6px 14px; border-radius: 6px; text-decoration: none; font-size: 14px; white-space: nowrap;">
             LINE公式アカウント 友だち追加
         </a>
     </div>
+
+    <div class="info">
         例文の日本語を読んで、空欄に入る英単語・連語を入力してください。複数語の連語はスペースまたは「/」で区切って入力できます。
-    <div class="settings">                                                                         
-        <div class="setting-title">                                                                 
-            <span>出題するUnit（複数選択可）</span>                                                    
-            <div class="unit-controls">                                                             
-                <button type="button" onclick="setAllUnits(true)">すべてつける</button>                
-                <button type="button" onclick="setAllUnits(false)">すべて外す</button>               
-            </div>                                                                                  
-        </div>                                                                                     
-        <div id="unitGroupsContainer" class="unit-groups"></div>                                    
+    </div>
+    <div class="settings">
+        <div class="setting-title">
+            <span>出題するUnit（複数選択可）</span>
+            <div class="unit-controls">
+                <button type="button" onclick="setAllUnits(true)">すべてつける</button>
+                <button type="button" onclick="setAllUnits(false)">すべて外す</button>
+            </div>
+        </div>
+        <div id="unitGroupsContainer" class="unit-groups"></div>
 
-        <div class="setting-row">                                                                  
-            <label for="order">出題順：</label>                                                       
-            <select id="order">                                                                    
-                <option value="sequential">順番に出題</option>                                         
-                <option value="random">ランダムに出題</option>                                           
-            </select>                                                                              
-            <button id="startButton" onclick="startQuiz()">開始</button>                            
-        </div>                                                                                     
-    </div>                                                                                         
+        <div class="setting-row">
+            <label for="order">出題順：</label>
+            <select id="order">
+                <option value="sequential">順番に出題</option>
+                <option value="random">ランダムに出題</option>
+            </select>
+            <button id="startButton" onclick="startQuiz()">開始</button>
+        </div>
+    </div>
 
-    <div id="japanese" class="japanese"></div>                                                    
-    <div id="english" class="english"></div>                                                      
-    <input id="answer" type="text" autocomplete="off" placeholder="英単語を入力">                        
-    <br>                                                                                           
-    <button id="answerButton" onclick="checkAnswer()">答える</button>                                
-    <button id="nextButton" onclick="nextQuestion()">次の問題</button>                                
-    
+    <div id="japanese" class="japanese"></div>
+    <div id="english" class="english"></div>
+    <input id="answer" type="text" autocomplete="off" placeholder="英単語を入力">
+    <br>
+    <button id="answerButton" onclick="checkAnswer()">答える</button>
+    <button id="nextButton" onclick="nextQuestion()">次の問題</button>
+
     <!-- 問題ごとの間違い報告ボタン & サイン -->
     <div style="margin-top: 15px; display: flex; align-items: center; gap: 10px; flex-wrap: wrap;">
         <button type="button" onclick="openReportModal()" style="background: #a94442; color: white; font-size: 14px; padding: 6px 12px; margin:0;">この問題の間違いを報告</button>
         <span id="questionErrorSign" style="color: #a94442; font-weight: bold; display: none; font-size: 14px;">⚠️ この問題には間違い報告が出ています</span>
     </div>
 
-    <div id="result"></div>                                                                       
-    <div id="score" class="score"></div>                                                          
-    <div id="finishOptions" style="display:none; margin-top: 15px;">                                                                       
+    <div id="result"></div>
+    <div id="score" class="score"></div>
+    <div id="finishOptions" style="display:none; margin-top: 15px;">
         <button id="retryWrongButton" class="primary" onclick="retryWrong()">間違った問題を解きなおす</button>
-    </div>                                                                                         
+    </div>
 
-    <!-- 全体要望エリア -->
+    <!-- ご意見・ご要望エリア -->
     <div class="extra-section">
         <h3 style="margin-top:0; color:#333; font-size:16px;">ご意見・ご要望 / サポート</h3>
         <textarea id="generalRequestText" placeholder="全体への要望やバグ報告をここに入力..." style="width:100%; height:60px; font-size:14px; padding:8px; border:1px solid #ccc; border-radius:6px; box-sizing:border-box;"></textarea>
@@ -279,7 +283,7 @@ const GAS_URL = "https://script.google.com/macros/s/AKfycbynPmP4T2UuUQ4Rq6V6zqZW
 let globalReports = [];
 
 // 単語データ（Unit 116〜150）
-const words = [                                                                                     
+const words = [
     // Unit 116
     { unit: "116", jp: "彼らは勇敢に敵と戦った。", en: "They fought bravely against the ______.", answer: "enemy" },
     { unit: "116", jp: "指導者たちは国家間の衝突を避けるために努力しなければならない。", en: "Leaders must make efforts to avoid a ______ between nations.", answer: "conflict" },
@@ -750,13 +754,13 @@ const words = [
     {unit: "150", jp: "コロナウイルスは多くの生徒が留学するのを妨げた。", en: "The coronavirus ______ many students ______ studying abroad.", answer: "prevented from" },
     {unit: "150", jp: "その男は彼女をだまして彼にお金を与えさせた。", en: "The man ______ her ______ giving him money.", answer: "tricked into" },
     {unit: "150", jp: "母はついに父を説得して新しい車を買わせた。", en: "My mother eventually ______ my father ______ buying a new car.", answer: "persuaded into" }
-];                                                                                                  
+];
 
-let currentList = words.slice();                                                                    
-let currentIndex = 0;                                                                               
-let correct = 0;                                                                                    
-let answered = false;                                                                               
-let wrongQuestions = [];                                                                            
+let currentList = words.slice();
+let currentIndex = 0;
+let correct = 0;
+let answered = false;
+let wrongQuestions = [];
 
 // 起動時にレポート情報を取得してエラーサインを反映する
 window.addEventListener("DOMContentLoaded", () => {
@@ -785,17 +789,17 @@ function updateQuestionErrorSign() {
     const sign = document.getElementById("questionErrorSign");
     if (!q || !sign) return;
 
-    const hasError = globalReports.some(r => 
-        r.type === 'word_error' && 
-        r.status === 'pending' && 
-        String(r.unit) === String(q.unit) && 
+    const hasError = globalReports.some(r =>
+        r.type === 'word_error' &&
+        r.status === 'pending' &&
+        String(r.unit) === String(q.unit) &&
         r.question === q.jp
     );
 
     sign.style.display = hasError ? "inline" : "none";
 }
 
-// グループ生成（125までは5Unitごと、126〜150は「期末テスト範囲」として囲む）
+// グループ生成（125までは5Unitごと、126〜150は「期末テスト範囲」枠の中に5Unitごとの囲いを配置）
 function renderUnitGroups() {
     const container = document.getElementById("unitGroupsContainer");
     container.innerHTML = "";
@@ -806,7 +810,7 @@ function renderUnitGroups() {
     // 1. 125までのUnitは5刻みでグループ化
     const preFinalUnits = uniqueUnits.filter(u => u <= 125);
     if (preFinalUnits.length > 0) {
-        let currentGroupStart = preFinalUnits[0];
+        let currentGroupStart = 116;
         const maxPreFinal = preFinalUnits[preFinalUnits.length - 1];
 
         while (currentGroupStart <= maxPreFinal) {
@@ -814,22 +818,45 @@ function renderUnitGroups() {
             const unitsInGroup = preFinalUnits.filter(u => u >= currentGroupStart && u <= currentGroupEnd);
 
             if (unitsInGroup.length > 0) {
-                container.appendChild(createGroupElement(`Unit ${currentGroupStart}〜${currentGroupEnd}`, unitsInGroup, false));
+                container.appendChild(createFiveUnitGroup(currentGroupStart, currentGroupEnd, unitsInGroup, false));
             }
             currentGroupStart += 5;
         }
     }
 
-    // 2. 126〜150を「期末テスト範囲」としてまとめて囲む
+    // 2. 126〜150を「期末テスト範囲」の枠で囲み、中に5Unitごとの囲いを作る
     const finalExamUnits = uniqueUnits.filter(u => u >= 126 && u <= 150);
     if (finalExamUnits.length > 0) {
-        container.appendChild(createGroupElement("期末テスト範囲（Unit 126〜150）", finalExamUnits, true));
+        const finalWrapper = document.createElement("div");
+        finalWrapper.className = "final-exam-wrapper";
+        finalWrapper.style.cssText = "border: 2px solid #1e5aa8; background: #f4f8ff; border-radius: 12px; padding: 14px;";
+
+        finalWrapper.innerHTML = `
+            <div style="font-weight: bold; color: #0d3b75; margin-bottom: 10px; display: flex; align-items: center; gap: 7px;">
+                <label class="group-label">
+                    <input type="checkbox" class="final-exam-checkbox" checked>
+                    期末テスト範囲（Unit 126〜150）
+                </label>
+            </div>
+            <div class="final-exam-subgroups" style="display: grid; gap: 10px;"></div>
+        `;
+
+        const subContainer = finalWrapper.querySelector(".final-exam-subgroups");
+        for (let start = 126; start <= 150; start += 5) {
+            const end = start + 4;
+            const unitsInGroup = finalExamUnits.filter(u => u >= start && u <= end);
+            if (unitsInGroup.length > 0) {
+                subContainer.appendChild(createFiveUnitGroup(start, end, unitsInGroup, false));
+            }
+        }
+
+        container.appendChild(finalWrapper);
     }
 
     // 3. 151以降があれば5刻みで表示
     const afterFinalUnits = uniqueUnits.filter(u => u > 150);
     if (afterFinalUnits.length > 0) {
-        let currentGroupStart = afterFinalUnits[0];
+        let currentGroupStart = 151;
         const maxAfter = afterFinalUnits[afterFinalUnits.length - 1];
 
         while (currentGroupStart <= maxAfter) {
@@ -837,46 +864,52 @@ function renderUnitGroups() {
             const unitsInGroup = afterFinalUnits.filter(u => u >= currentGroupStart && u <= currentGroupEnd);
 
             if (unitsInGroup.length > 0) {
-                container.appendChild(createGroupElement(`Unit ${currentGroupStart}〜${currentGroupEnd}`, unitsInGroup, false));
+                container.appendChild(createFiveUnitGroup(currentGroupStart, currentGroupEnd, unitsInGroup, false));
             }
             currentGroupStart += 5;
         }
     }
 
+    // 「期末テスト範囲」全体のチェックボックス連動
+    document.querySelectorAll('.final-exam-checkbox').forEach(finalBox => {
+        finalBox.addEventListener('change', function() {
+            const wrapper = this.closest('.final-exam-wrapper');
+            wrapper.querySelectorAll('input[type="checkbox"]').forEach(box => {
+                box.checked = this.checked;
+                box.indeterminate = false;
+            });
+        });
+    });
+
+    // 5Unitごとのチェックボックス連動
     document.querySelectorAll('.group-checkbox').forEach(groupBox => {
         groupBox.addEventListener('change', function(event) {
             event.stopPropagation();
             const group = this.closest('.unit-group');
             group.querySelectorAll('input[name="unit"]').forEach(box => { box.checked = this.checked; });
             this.indeterminate = false;
+            updateGroupCheckboxes();
         });
     });
 
+    // 個別Unitチェックボックス連動
     document.querySelectorAll('input[name="unit"]').forEach(box => {
         box.addEventListener('change', updateGroupCheckboxes);
     });
+
     updateGroupCheckboxes();
 }
 
-function createGroupElement(titleText, unitsInGroup, isFinalExam) {
+function createFiveUnitGroup(start, end, unitsInGroup, isOpen) {
     const details = document.createElement("details");
     details.className = "unit-group";
-    details.open = isFinalExam;
-
-    if (isFinalExam) {
-        details.style.border = "2px solid #1e5aa8";
-        details.style.backgroundColor = "#f4f8ff";
-    }
-
-    const summaryStyle = isFinalExam
-        ? "background: #dceaff; color: #0d3b75;"
-        : "";
+    details.open = isOpen;
 
     details.innerHTML = `
-        <summary style="${summaryStyle}">
+        <summary>
             <label class="group-label" onclick="event.stopPropagation()">
                 <input type="checkbox" class="group-checkbox" checked>
-                ${titleText}
+                Unit ${start}〜${end}
             </label>
         </summary>
         <div class="unit-options">
@@ -905,86 +938,101 @@ function updateGroupCheckboxes() {
             groupBox.checked = false; groupBox.indeterminate = true;
         }
     });
+
+    document.querySelectorAll('.final-exam-wrapper').forEach(wrapper => {
+        const boxes = Array.from(wrapper.querySelectorAll('input[name="unit"]'));
+        const finalBox = wrapper.querySelector('.final-exam-checkbox');
+        if (!finalBox || boxes.length === 0) return;
+
+        const checkedCount = boxes.filter(box => box.checked).length;
+        if (checkedCount === 0) {
+            finalBox.checked = false; finalBox.indeterminate = false;
+        } else if (checkedCount === boxes.length) {
+            finalBox.checked = true; finalBox.indeterminate = false;
+        } else {
+            finalBox.checked = false; finalBox.indeterminate = true;
+        }
+    });
 }
 
-function startQuiz() {                                                                              
-    const selectedUnits = Array.from(document.querySelectorAll('input[name="unit"]:checked')).map(input => input.value);                                                                    
+function startQuiz() {
+    const selectedUnits = Array.from(document.querySelectorAll('input[name="unit"]:checked')).map(input => input.value);
 
-    if (selectedUnits.length === 0) {                                                               
-        document.getElementById("result").textContent = "Unitを1つ以上選択してください。";                       
-        return;                                                                                     
-    }                                                                                               
+    if (selectedUnits.length === 0) {
+        document.getElementById("result").textContent = "Unitを1つ以上選択してください。";
+        return;
+    }
 
-    currentList = words.filter(word => selectedUnits.includes(word.unit));                          
+    currentList = words.filter(word => selectedUnits.includes(word.unit));
 
-    if (document.getElementById("order").value === "random") {                                      
-        for (let i = currentList.length - 1; i > 0; i--) {                                          
-            const j = Math.floor(Math.random() * (i + 1));                                         
-            [currentList[i], currentList[j]] = [currentList[j], currentList[i]];                    
-        }                                                                                           
-    }                                                                                               
+    if (document.getElementById("order").value === "random") {
+        for (let i = currentList.length - 1; i > 0; i--) {
+            const j = Math.floor(Math.random() * (i + 1));
+            [currentList[i], currentList[j]] = [currentList[j], currentList[i]];
+        }
+    }
 
-    currentIndex = 0;                                                                               
-    correct = 0;                                                                                    
-    answered = false;                                                                               
-    wrongQuestions = [];                                                                            
-    document.getElementById("finishOptions").style.display = "none";                                
-    showQuestion();                                                                                 
-}                                                                                                   
+    currentIndex = 0;
+    correct = 0;
+    answered = false;
+    wrongQuestions = [];
+    document.getElementById("finishOptions").style.display = "none";
+    showQuestion();
+}
 
-function showQuestion() {                                                                           
-    const q = currentList[currentIndex];                                                            
-    document.getElementById("japanese").textContent = q.jp;                                         
-    document.getElementById("english").textContent = q.en;                                          
-    document.getElementById("answer").value = "";                                                   
-    document.getElementById("answer").focus();                                                      
-    document.getElementById("result").textContent = "";                                             
-    answered = false;                                                                               
+function showQuestion() {
+    const q = currentList[currentIndex];
+    document.getElementById("japanese").textContent = q.jp;
+    document.getElementById("english").textContent = q.en;
+    document.getElementById("answer").value = "";
+    document.getElementById("answer").focus();
+    document.getElementById("result").textContent = "";
+    answered = false;
 
     document.getElementById("score").textContent = `${currentIndex + 1} / ${currentList.length} 正解：${correct}`;
     updateQuestionErrorSign();
-}                                                                                                   
+}
 
-function checkAnswer() {                                                                            
-    if (answered) return;                                                                           
-    const input = document.getElementById("answer").value.trim().replace(/\s*\/\s*/g, " ").replace(/\s+/g, " ");                                   
-    const answer = currentList[currentIndex].answer.trim().replace(/\s*\/\s*/g, " ").replace(/\s+/g, " ");                                                
+function checkAnswer() {
+    if (answered) return;
+    const input = document.getElementById("answer").value.trim().replace(/\s*\/\s*/g, " ").replace(/\s+/g, " ");
+    const answer = currentList[currentIndex].answer.trim().replace(/\s*\/\s*/g, " ").replace(/\s+/g, " ");
 
-    if (input.toLowerCase() === answer.toLowerCase()) {                                                                         
-        document.getElementById("result").textContent = "○ 正解！";                                    
-        correct++;                                                                                  
-    } else {                                                                                        
-        document.getElementById("result").textContent = `× 不正解 答え：${answer}`;                                  
-        if (!wrongQuestions.includes(currentList[currentIndex])) {                                  
-            wrongQuestions.push(currentList[currentIndex]);                                         
-        }                                                                                           
-    }                                                                                               
-    answered = true;                                                                                
-    document.getElementById("score").textContent = `${currentIndex + 1} / ${currentList.length} 正解：${correct}`;                              
-}                                                                                                   
+    if (input.toLowerCase() === answer.toLowerCase()) {
+        document.getElementById("result").textContent = "○ 正解！";
+        correct++;
+    } else {
+        document.getElementById("result").textContent = `× 不正解 答え：${answer}`;
+        if (!wrongQuestions.includes(currentList[currentIndex])) {
+            wrongQuestions.push(currentList[currentIndex]);
+        }
+    }
+    answered = true;
+    document.getElementById("score").textContent = `${currentIndex + 1} / ${currentList.length} 正解：${correct}`;
+}
 
-function nextQuestion() {                                                                           
-    if (currentIndex < currentList.length - 1) {                                                    
-        currentIndex++;                                                                             
-        showQuestion();                                                                             
-    } else {                                                                                        
-        document.getElementById("result").textContent = `終了！ ${currentList.length}問中 ${correct}問正解`;                                          
-        document.getElementById("finishOptions").style.display = "block";                           
-        document.getElementById("retryWrongButton").disabled = wrongQuestions.length === 0;         
-        document.getElementById("retryWrongButton").textContent = "間違った問題を解きなおす";                   
-    }                                                                                               
-}                                                                                                   
+function nextQuestion() {
+    if (currentIndex < currentList.length - 1) {
+        currentIndex++;
+        showQuestion();
+    } else {
+        document.getElementById("result").textContent = `終了！ ${currentList.length}問中 ${correct}問正解`;
+        document.getElementById("finishOptions").style.display = "block";
+        document.getElementById("retryWrongButton").disabled = wrongQuestions.length === 0;
+        document.getElementById("retryWrongButton").textContent = "間違った問題を解きなおす";
+    }
+}
 
-function retryWrong() {                                                                             
-    if (wrongQuestions.length === 0) return;                                                        
-    currentList = wrongQuestions.slice();                                                           
-    currentIndex = 0;                                                                               
-    correct = 0;                                                                                    
-    answered = false;                                                                               
-    wrongQuestions = [];                                                                            
-    document.getElementById("finishOptions").style.display = "none";                                
-    showQuestion();                                                                                 
-}                                                                                                   
+function retryWrong() {
+    if (wrongQuestions.length === 0) return;
+    currentList = wrongQuestions.slice();
+    currentIndex = 0;
+    correct = 0;
+    answered = false;
+    wrongQuestions = [];
+    document.getElementById("finishOptions").style.display = "none";
+    showQuestion();
+}
 
 // --- 追加機能のダイアログ・通信処理 ---
 
@@ -1055,7 +1103,7 @@ function submitGeneralRequest() {
         .catch(err => alert("通信エラーが発生しました。"));
 }
 
-document.getElementById("answer").addEventListener("keydown", function(event) {                     
+document.getElementById("answer").addEventListener("keydown", function(event) {
     if (event.key === "Enter") {
         const val = this.value.trim();
         if (val === "26136") {
@@ -1064,12 +1112,12 @@ document.getElementById("answer").addEventListener("keydown", function(event) {
             return;
         }
 
-        if (!answered) {                                                                            
-            checkAnswer();                                                                          
-        } else {                                                                                    
-            nextQuestion();                                                                         
-        }                                                                                           
-    }                                                                                               
+        if (!answered) {
+            checkAnswer();
+        } else {
+            nextQuestion();
+        }
+    }
 });
 
 function authAdminAndOpen() {
@@ -1106,7 +1154,7 @@ function loadAdminDashboard() {
 
             let html = "<table style='width:100%; border-collapse:collapse;'>";
             html += "<tr style='background:#eee; text-align:left;'><th style='padding:6px;'>種類</th><th style='padding:6px;'>内容</th><th style='padding:6px;'>操作</th></tr>";
-            
+
             data.forEach(r => {
                 const typeLabel = r.type === 'word_error' ? '問題間違い' : '一般要望';
                 html += `<tr style='border-bottom:1px solid #ddd;'>
@@ -1143,6 +1191,7 @@ function resolveReport(id) {
 function closeAdminModal() {
     document.getElementById("adminModal").style.display = "none";
 }
-</script>                                                                                          
-</body>                                                                                            
-</html>[cite: 1, 2, 3, 4, 5, 6]
+</script>
+</body>
+</html>
+```[cite: 1, 2, 3, 4, 5, 6]

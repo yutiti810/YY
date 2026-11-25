@@ -995,32 +995,27 @@ function showQuestion() {
 
 function checkAnswer() {
     if (answered) return;
-    const input = document.getElementById("answer").value.trim().replace(/\s*\/\s*/g, " ").replace(/\s+/g, " ");
-    const answer = currentList[currentIndex].answer.trim().replace(/\s*\/\s*/g, " ").replace(/\s+/g, " ");
+    const rawInput = document.getElementById("answer").value.trim().replace(/\s*\/\s*/g, " ").replace(/\s+/g, " ").toLowerCase();
+    const currentQ = currentList[currentIndex];
 
-    if (input.toLowerCase() === answer.toLowerCase()) {
+    const acceptedAnswers = (Array.isArray(currentQ.answer) ? currentQ.answer : [currentQ.answer])
+        .map(ans => ans.trim().replace(/\s*\/\s*/g, " ").replace(/\s+/g, " ").toLowerCase());
+
+    const shownAnswer = currentQ.displayAnswer
+        ? currentQ.displayAnswer
+        : (Array.isArray(currentQ.answer) ? currentQ.answer.join(" / ") : currentQ.answer);
+
+    if (acceptedAnswers.includes(rawInput)) {
         document.getElementById("result").textContent = "○ 正解！";
         correct++;
     } else {
-        document.getElementById("result").textContent = `× 不正解 答え：${answer}`;
-        if (!wrongQuestions.includes(currentList[currentIndex])) {
-            wrongQuestions.push(currentList[currentIndex]);
+        document.getElementById("result").textContent = `× 不正解 答え：${shownAnswer}`;
+        if (!wrongQuestions.includes(currentQ)) {
+            wrongQuestions.push(currentQ);
         }
     }
     answered = true;
     document.getElementById("score").textContent = `${currentIndex + 1} / ${currentList.length} 正解：${correct}`;
-}
-
-function nextQuestion() {
-    if (currentIndex < currentList.length - 1) {
-        currentIndex++;
-        showQuestion();
-    } else {
-        document.getElementById("result").textContent = `終了！ ${currentList.length}問中 ${correct}問正解`;
-        document.getElementById("finishOptions").style.display = "block";
-        document.getElementById("retryWrongButton").disabled = wrongQuestions.length === 0;
-        document.getElementById("retryWrongButton").textContent = "間違った問題を解きなおす";
-    }
 }
 
 function retryWrong() {

@@ -995,17 +995,21 @@ function showQuestion() {
 
 function checkAnswer() {
     if (answered) return;
-    const rawInput = document.getElementById("answer").value.trim().replace(/\s*\/\s*/g, " ").replace(/\s+/g, " ").toLowerCase();
+    const rawInput = document.getElementById("answer").value.trim().replace(/\s*\/\s*/g, " ").replace(/\s+/g, " ");
     const currentQ = currentList[currentIndex];
 
     const acceptedAnswers = (Array.isArray(currentQ.answer) ? currentQ.answer : [currentQ.answer])
-        .map(ans => ans.trim().replace(/\s*\/\s*/g, " ").replace(/\s+/g, " ").toLowerCase());
+        .map(ans => ans.trim().replace(/\s*\/\s*/g, " ").replace(/\s+/g, " "));
 
     const shownAnswer = currentQ.displayAnswer
         ? currentQ.displayAnswer
         : (Array.isArray(currentQ.answer) ? currentQ.answer.join(" / ") : currentQ.answer);
 
-    if (acceptedAnswers.includes(rawInput)) {
+    const isCorrect =
+        acceptedAnswers.includes(rawInput) ||
+        (acceptedAnswers.includes("connects to") && rawInput === "connects with");
+
+    if (isCorrect) {
         document.getElementById("result").textContent = "○ 正解！";
         correct++;
     } else {

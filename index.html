@@ -834,7 +834,7 @@ function renderUnitGroups() {
         finalWrapper.innerHTML = `
             <div style="font-weight: bold; color: #0d3b75; margin-bottom: 10px; display: flex; align-items: center; gap: 7px;">
                 <label class="group-label">
-                    <input type="checkbox" class="final-exam-checkbox" checked>
+                    <input type="checkbox" class="final-exam-checkbox">
                     期末テスト範囲（Unit 126〜150）
                 </label>
             </div>
@@ -908,17 +908,16 @@ function createFiveUnitGroup(start, end, unitsInGroup, isOpen) {
     details.innerHTML = `
         <summary>
             <label class="group-label" onclick="event.stopPropagation()">
-                <input type="checkbox" class="group-checkbox" checked>
+                <input type="checkbox" class="group-checkbox">
                 Unit ${start}〜${end}
             </label>
         </summary>
         <div class="unit-options">
-            ${unitsInGroup.map(u => `<label><input type="checkbox" name="unit" value="${u}" checked> Unit ${u}</label>`).join("")}
+            ${unitsInGroup.map(u => `<label><input type="checkbox" name="unit" value="${u}"> Unit ${u}</label>`).join("")}
         </div>
     `;
     return details;
 }
-
 function setAllUnits(checkStatus) {
     document.querySelectorAll('#unitGroupsContainer input[type="checkbox"]').forEach(box => { box.checked = checkStatus; });
     updateGroupCheckboxes();
